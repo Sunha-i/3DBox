@@ -1,0 +1,40 @@
+@font-face {
+    font-family: "Apple Garamond Light";
+    src: url("../../public/assets/fonts/AppleGaramond-Light.woff") format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+body {
+    background-color: #63639C;
+}
+
+.container {
+    width: 730px;
+    height: 600px;
+    background-color: #dddddd;
+    border: 1px solid #000000;
+    box-shadow: inset 0px 5px 0px #ffffff, 
+                inset 5px 0px 0px #ffffff, 
+                inset 0px -5px 0px rgba(38, 38, 38, 0.4), 
+                inset -5px 0px 0px rgba(38, 38, 38, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* set center */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.title {
+    font-family: "Apple Garamond Light";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 64px;
+    text-align: center;
+    color: #262626;
+    text-shadow: 7px 7px 7px rgba(0, 0, 0, 0.25);
+    letter-spacing: -0.02em;
+}
