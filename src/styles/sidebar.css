@@ -1,7 +1,22 @@
 .sidebar {
-  width: 270px;
+  min-width: 220px;
   height: 100vh;
   background-color: #CED0E0;
   border-right: 1px solid #C6C3CA;
+  padding-top: 30px;
 }
 
+.container {
+  height: 46px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.container p {
+  font-size: 17px;
+}
+
+.clicked {
+  background-color: #BFC0CD;
+}
