@@ -3,3 +3,67 @@
   height: 100%;
   background-color: #DFDFE7;
 }
+
+.main {
+  width: 100%;
+  height: 100%;
+  display: flex;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.button_container {
+  margin: 10px 0;
+  padding: 15px 30px;
+  display: flex;
+}
+
+.upload {
+  width: 110px;
+  height: 60px;
+  padding: 13px;
+  background-color: #4545C2;
+  border: 1px solid #BFBFBF;
+}
+
+.upload p {
+  color: white;
+  font-size: 18px;
+  margin-top: 9px;
+}
+
+.create {
+  width: 110px;
+  height: 57px;
+  padding: 15px 13px;
+  background-color: #EAEAEA;
+  border: 1px solid #BFBFBF;
+  margin-left: 15px;
+}
+
+.create p {
+  color: black;
+  font-size: 18px;
+  margin-top: 13px;
+}
+
+.button {
+  width: 100px;
+  height: 25px;
+  margin-right: 10px;
+  padding: 10px;
+  display: flex;
+  background-color: #D4D0D0;
+  align-items: center;
+}
+
+.button p {
+  margin: 0 5px;
+}
+
+.content_container {
+  display: flex;
+}
