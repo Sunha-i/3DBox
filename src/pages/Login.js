@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/login.css";
+import styles from "../styles/login.module.css";
 
 export default function Login() {
 
@@ -15,9 +15,9 @@ export default function Login() {
   };
 
   return (
-    <div class="container">
+    <div className={styles.container}>
       <div style={{ height: "120px" }}></div>
-      <div class="title">Welcome to 3D box</div>
+      <div className={styles.title}>Welcome to 3D box</div>
       <div style={{ height: "20px" }}></div>
       <object type="image/svg+xml" data="/assets/images/projectdesc.svg">
           <img src="/assets/images/projectdesc.svg" alt="Project Description" />
