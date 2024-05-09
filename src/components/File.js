@@ -1,11 +1,11 @@
 import React from "react";
-import "../styles/file.css";
+import styles from "../styles/file.module.css";
 import Checkbox from "./CheckBox/Checkbox";
 
 export default function File({ name }) {
   return (
-    <div className="file">
-      <div className="file_container">
+    <div className={styles.file}>
+      <div className={styles.file_container}>
         <Checkbox value={name} />
         <img src="/assets/images/cloud.png" alt="cloud" />
       </div>

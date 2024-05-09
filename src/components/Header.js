@@ -1,9 +1,9 @@
 import React from "react";
-import "../styles/header.css";
+import styles from "../styles/header.module.css";
 
 export default function Header() {
   return (
-    <div className="header">
+    <div className={styles.header}>
       <img
         src="/assets/images/logo.png"
         alt="logo"
