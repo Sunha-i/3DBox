@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Header from "../components/Header";
 import SideBar from "../components/SideBar";
 import styles from "../styles/home.module.css";
@@ -7,6 +7,26 @@ import CheckboxGroup from "../components/CheckBox/CheckboxGroup";
 
 export default function Home() {
   const [files, setFiles] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const modalBackground = useRef();
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const openDeleteModal = () => {
+    setDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+  };
+
   return (
     <div className={styles.home}>
       <Header />
@@ -18,7 +38,7 @@ export default function Home() {
               <img src="/assets/images/upload.png" alt="upload" />
               <p>업로드</p>
             </div>
-            <div className={styles.create}>
+            <div className={styles.create} onClick={openModal}>
               <img src="/assets/images/folder-plus.png" alt="upload" />
               <p>폴더 만들기</p>
             </div>
@@ -40,7 +60,11 @@ export default function Home() {
               <img src="/assets/images/share.png" alt="upload" />
               <p>항목 공유</p>
             </div>
-            <div className={styles.button} style={{ width: "70px" }}>
+            <div
+              className={styles.button}
+              style={{ width: "70px" }}
+              onClick={openDeleteModal}
+            >
               <img src="/assets/images/trash.png" alt="upload" />
               <p>삭제</p>
             </div>
@@ -51,6 +75,82 @@ export default function Home() {
               <File name="구름2" />
             </CheckboxGroup>
           </div>
+          {modalOpen && ( // 폴더 생성 모달
+            <div
+              className={styles.modal}
+              ref={modalBackground}
+              onClick={(e) => {
+                if (e.target === modalBackground.current) {
+                  setModalOpen(false);
+                }
+              }}
+            >
+              <div className={styles.modal_content}>
+                <div className={styles.close}>
+                  <h2>폴더 생성</h2>
+                  <img
+                    src="/assets/images/close.png"
+                    alt="close"
+                    onClick={closeModal}
+                    width={30}
+                    height={30}
+                  />
+                </div>
+                <p>이름</p>
+                <input type="text" className={styles.input}></input>
+                <div className={styles.btn_container}>
+                  <button className={styles.btn} onClick={closeModal}>
+                    취소
+                  </button>
+                  <button
+                    className={styles.btn}
+                    style={{ backgroundColor: "#4545C2", color: "white" }}
+                  >
+                    만들기
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          {deleteModalOpen && ( // 삭제 모달
+            <div
+              className={styles.modal}
+              ref={modalBackground}
+              onClick={(e) => {
+                if (e.target === modalBackground.current) {
+                  closeDeleteModal();
+                }
+              }}
+            >
+              <div className={styles.modal_content}>
+                <div className={styles.close}>
+                  <h2>항목 삭제</h2>
+                  <img
+                    src="/assets/images/close.png"
+                    alt="close"
+                    onClick={closeDeleteModal}
+                    width={30}
+                    height={30}
+                  />
+                </div>
+                <p>이 항목을 삭제하시겠습니까?</p>
+                <div
+                  className={styles.btn_container}
+                  style={{ marginTop: "45px" }}
+                >
+                  <button className={styles.btn} onClick={closeDeleteModal}>
+                    취소
+                  </button>
+                  <button
+                    className={styles.btn}
+                    style={{ backgroundColor: "#4545C2", color: "white" }}
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -7,7 +7,11 @@ export default function File({ name }) {
     <div className={styles.file}>
       <div className={styles.file_container}>
         <Checkbox value={name} />
-        <img src="/assets/images/cloud.png" alt="cloud" />
+        <img
+          src="/assets/images/cloud.png"
+          alt="cloud"
+          style={{ margin: "0 13px" }}
+        />
       </div>
       <p>{name}</p>
     </div>

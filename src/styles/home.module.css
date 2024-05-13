@@ -27,6 +27,7 @@
   padding: 13px;
   background-color: #4545C2;
   border: 1px solid #BFBFBF;
+  cursor: pointer;
 }
 
 .upload p {
@@ -42,6 +43,7 @@
   background-color: #EAEAEA;
   border: 1px solid #BFBFBF;
   margin-left: 15px;
+  cursor: pointer;
 }
 
 .create p {
@@ -58,6 +60,7 @@
   display: flex;
   background-color: #D4D0D0;
   align-items: center;
+  cursor: pointer;
 }
 
 .button p {
@@ -66,4 +69,67 @@
 
 .content_container {
   display: flex;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 배경 어둡게 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal_content {
+  background-color: white;
+  width: 420px;
+  height: 230px;
+  padding: 20px 30px;
+  border-radius: 5px;
+}
+
+.modal_content p {
+  margin: 20px 0 10px;
+}
+
+.close_button {
+  position: absolute;
+  top: 35%;
+  right: 31%;
+  cursor: pointer;
+  font-size: 35px;
+  color: black;
+}
+
+.close {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.input {
+  width: 390px;
+  height: 20px;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 0 0 10px;
+}
+
+.btn_container {
+  margin-left: 60%;
+  margin-top: 10px;
+}
+
+
+.btn {
+  width: 70px;
+  height: 35px;
+  border: none;
+  margin: 10px 5px;
+  padding: 3px;
+  cursor: pointer;
+  font-size: 16px;
 }
