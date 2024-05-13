@@ -36,6 +36,10 @@
   margin-top: 9px;
 }
 
+.file {
+  display: none;
+}
+
 .create {
   width: 110px;
   height: 57px;
@@ -111,7 +115,7 @@
 }
 
 .input {
-  width: 390px;
+  width: 395px;
   height: 20px;
   border-radius: 5px;
   padding: 5px;
