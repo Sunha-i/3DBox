@@ -5,7 +5,11 @@ import Checkbox from "./CheckBox/Checkbox";
 export default function File({ name, checked }) {
   return (
     <div className={styles.file}>
-      <div className={`${styles.file_container} ${checked && styles.checked}`}>
+      <div
+        className={`${styles.file_container} ${
+          checked ? styles.checked : styles.none
+        }`}
+      >
         <Checkbox value={name} />
         <img
           src="/assets/images/cloud.png"
@@ -13,7 +17,7 @@ export default function File({ name, checked }) {
           style={{ margin: "0 13px" }}
         />
       </div>
-      <p>{name}</p>
+      <p className={styles.text}>{name}</p>
     </div>
   );
 }

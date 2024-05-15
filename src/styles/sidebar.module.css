@@ -1,6 +1,6 @@
 .sidebar {
   width: 220px;
-  height: 100vh;
+  height: 92vh;
   background-color: #CED0E0;
   border-right: 1px solid #C6C3CA;
   padding-top: 30px;
@@ -12,6 +12,19 @@
   align-items: center;
   padding-left: 20px;
   cursor: pointer;
+}
+
+.container_bin {
+  width: 200px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  cursor: pointer;
+  bottom: 10px;
+  position: absolute;
+  padding-top: 10px;
+  border-top: 1px solid #a8a8a8;
 }
 
 .container p {

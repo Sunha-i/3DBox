@@ -4,8 +4,11 @@ import SideBar from "../components/SideBar";
 import styles from "../styles/home.module.css";
 import File from "../components/File";
 import CheckboxGroup from "../components/CheckBox/CheckboxGroup";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const navigate = useNavigate();
+
   const [files, setFiles] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
@@ -116,6 +119,9 @@ export default function Home() {
                   <button
                     className={styles.btn}
                     style={{ backgroundColor: "#4545C2", color: "white" }}
+                    onClick={() => {
+                      navigate("/folder");
+                    }}
                   >
                     만들기
                   </button>
