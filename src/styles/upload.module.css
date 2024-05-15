@@ -1,0 +1,42 @@
+@font-face {
+  font-family: "ChiKareGo2";
+  src: url("../../public/assets/fonts/ChiKareGo2.ttf") format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.container {
+  background-color: #dddddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dragZone {
+  position: absolute;
+  top: 20px;
+  left: 5px;
+  width: 291px;
+  height: 137px;
+  background-color: #474764;
+  box-shadow: inset 0px 1px 0px #262626, 
+              inset 1px 0px 0px #262626,
+              -1px -1px rgba(38, 38, 38, 0.4),
+              1px 1px #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.message {
+  font-family: "ChiKareGo2";
+  font-style: normal;
+  font-size: 25px;
+  color: #dddddd;
+  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
+  line-height: 50px;
+}

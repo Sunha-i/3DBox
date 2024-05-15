@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Folder from "./pages/Folder";
 import Bin from "./pages/Bin";
 import KakaoRedirectPage from "./pages/KakaoRedirectPage";
+import Upload from "./testpages/Upload";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/oauth/redirected/kakao" element={<KakaoRedirectPage />} />
         <Route path="/folder" element={<Folder />} />
         <Route path="/bin" element={<Bin />} />
+        <Route path="/upload" element={<Upload />} />
       </Routes>
     </BrowserRouter>
   );
