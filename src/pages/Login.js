@@ -13,6 +13,9 @@ export default function Login() {
   const handleButtonRelease = () => {
     setIsPressed(false);
   };
+  const handleButtonClick = () => {
+    window.location.href = 'http://localhost:8080/oauth/kakao';
+  };
 
   return (
     <div className={styles.container}>
@@ -23,7 +26,7 @@ export default function Login() {
           <img src="/assets/images/projectdesc.svg" alt="Project Description" />
       </object>
       <div style={{ height: "47px" }}></div>
-      <button type="button" onMouseDown={handleButtonPressing} onMouseUp={handleButtonRelease}>
+      <button type="button" onMouseDown={handleButtonPressing} onMouseUp={handleButtonRelease} onClick={handleButtonClick}>
         <img src={ isPressed ? "/assets/images/googlepressing.svg"
                              : "/assets/images/googledefault.svg"} alt="Login with Google" />
       </button>
