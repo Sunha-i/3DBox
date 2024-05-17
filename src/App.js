@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Folder from "./pages/Folder";
+import Folder from "./testpages/Folder";
 import Bin from "./pages/Bin";
 import KakaoRedirectPage from "./pages/KakaoRedirectPage";
 import Upload from "./testpages/Upload";
