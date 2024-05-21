@@ -75,10 +75,33 @@ body {
   align-items: center;
 }
 
-.folder_tree{
-  background-image: url("../../public/assets/images/foldertree.png");
+.trash {
+  background-image: url("../../public/assets/images/trash_empty.png");
   background-repeat: no-repeat;
-  width: 277px;
-  height: 565px;
-  padding: 15px 0 0 25px;
+  width: 80px;
+  height: 80px;
+}
+
+.image_zone {
+  background-image: url("../../public/assets/images/filezone.png");
+  background-repeat: no-repeat;
+  width: 1127px;
+  padding: 70px 20px 50px 90px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  position: relative;
+  float: right;
+}
+
+.image_container {
+  background-image: url("../../public/assets/images/imagezone.png");
+  background-repeat: no-repeat;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  margin: 4px;
 }

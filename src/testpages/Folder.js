@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import styles from "../styles/folder.module.css";
 import Dragcont from "../components/Dragcont";
+import File from "./File";
+import Trash from "./Trash";
+import { DndProvider } from "react-dnd";
 
 export default function Folder() {
   const [editIndex, setEditIndex] = useState(null);
@@ -11,6 +14,7 @@ export default function Folder() {
     "Work",
   ]);
   const [newName, setNewName] = useState("");
+  const [images, setImages] = useState([]);
 
   const handleDoubleClick = (index) => {
     setEditIndex(index);
@@ -32,6 +36,10 @@ export default function Folder() {
     if (e.key === "Enter") {
       handleSave(index);
     }
+  };
+
+  const handleDelete = (id) => {
+    setImages((prevImages) => prevImages.filter((_, index) => index !== id));
   };
 
   return (
@@ -61,6 +69,7 @@ export default function Folder() {
                   </div>
                 ) : (
                   <div
+                    key={index}
                     className={styles.name}
                     onDoubleClick={() => handleDoubleClick(index)}
                   >
@@ -73,12 +82,11 @@ export default function Folder() {
         </div>
       </Dragcont>
       <Dragcont>
-        <div className={styles.folder_tree}>
-          <p># Object 01</p>
-          <p># Object 02</p>
-          <p># Object 03</p>
-        </div>
+        <Trash onDelete={handleDelete} />
       </Dragcont>
+      <DndProvider onDelete={handleDelete}>
+        <File />
+      </DndProvider>
     </div>
   );
 }
