@@ -9,6 +9,7 @@ import Upload from "./testpages/Upload";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import FolderTree from "./testpages/FolderTree";
+import ContextMenu from "./testpages/ContextMenu";
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/bin" element={<Bin />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/foldertree" element={<FolderTree />} />
+          <Route path="/contextmenu" element={<ContextMenu />} />
         </Routes>
       </BrowserRouter>
     </DndProvider>
