@@ -31,8 +31,7 @@
   justify-content: center;
   align-items: center;
 }
-.dragZone.active, .dragZone:hover {
-  /* background-color: #5a5a7f;  */
+.dragZone.active, .dragZone:hover, .uploadZone.active {
   background-color: #4f4f71; 
 }
 .dragZone:hover .message {
@@ -55,11 +54,12 @@
   color: #eeeeee;
 }
 
-/* ~ 끝까지 수정 예정  */
 .uploadZone {
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
+  /* scroll */
+  overflow-y: auto;
 }
 
 .thumbnail {
@@ -87,12 +87,37 @@
 }
 
 .addButton {
-  /* 새로운 스타일 */
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
+  margin: 4px;
   border: 2px dashed #ccc;
   cursor: pointer;
+}
+
+.addButton span {
+  color: white;
+}
+
+.uploadButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  margin: 4px;
+  border: 1px solid #262626;
+  background-color: #bbb;
+  box-shadow: inset -2px -2px 0px #808080,
+              inset 2px 2px 0px #fff;
+  cursor: pointer;
+  font-size: 15px;
+  text-decoration: underline;
+}
+.uploadButton.active {
+  background-color: #808080;
+  box-shadow: inset -2px -2px 0px #a0a0a0,
+              inset 2px 2px 0px #525252;
 }
