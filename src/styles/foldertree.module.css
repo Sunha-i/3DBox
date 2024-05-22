@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* set center */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.treeZone {
+  position: absolute;
+  top: 20px;
+  left: 5px;
+  width: 269px;
+  height: 545px;
+  background-color: #dddddd;
+  box-shadow: inset 1px 1px 0px #262626, 
+              inset 2px 2px 0px #ffffff, 
+              -1px -1px rgba(38, 38, 38, 0.4);
+              /* 1px 1px #ffffff; */
+}
