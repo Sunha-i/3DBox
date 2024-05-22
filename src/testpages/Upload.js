@@ -4,6 +4,7 @@ import styles from "../styles/upload.module.css";
 export default function Upload() {
   const [isActive, setActive] = useState(false);
   const [uploadQueue, setUploadQueue] = useState([]);
+  const [isPressed, setIsPressed] = useState(false);
 
   const handleDragStart = () => setActive(true);
   const handleDragEnd = () => setActive(false);
@@ -25,7 +26,6 @@ export default function Upload() {
     handleFiles(files);
   };
   
-  /* 로직 체크 */
   const handleFiles = (files) => {
     const fileArray = Array.from(files);
     fileArray.forEach(file => {
@@ -38,11 +38,22 @@ export default function Upload() {
     });
   };
 
-  /* 로직 체크 */
   const handleDelete = (index) => {
     const newFiles = [...uploadQueue];
     newFiles.splice(index, 1);
     setUploadQueue(newFiles);
+  };
+
+  const handleUploadFiles = () => {
+    // logic 'll be updated
+    console.log("Uploading files:", uploadQueue);
+  };
+
+  const handleButtonPressing = () => {
+    setIsPressed(true);
+  };
+  const handleButtonRelease = () => {
+    setIsPressed(false);
   };
 
   return (
@@ -62,8 +73,11 @@ export default function Upload() {
           </p>
         </label>
       ) : (
-        /* 수정 예정 */
-        <div className={styles.uploadZone}>
+        <div className={`${styles.uploadZone} ${isActive ? styles.active : ''}`} 
+            onDragEnter={handleDragStart}
+            onDragLeave={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}>
           {uploadQueue.map((fileObj, index) => (
             <div key={index} className={styles.thumbnail}>
               <img src={fileObj.dataUrl} alt={fileObj.file.name} />
@@ -76,6 +90,10 @@ export default function Upload() {
             <input type="file" className={styles.file} onChange={handleUpload} multiple />
             <span>+</span>
           </label>
+          <button className={`${styles.uploadButton} ${isPressed ? styles.active : ''}`}
+              onMouseDown={handleButtonPressing} onMouseUp={handleButtonRelease} onClick={handleUploadFiles}>
+            <span>upload</span>
+          </button>
         </div>
       )}
     </div>
