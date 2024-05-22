@@ -6,6 +6,7 @@ import Folder from "./pages/Folder";
 import Bin from "./pages/Bin";
 import KakaoRedirectPage from "./pages/KakaoRedirectPage";
 import Upload from "./testpages/Upload";
+import ContextMenu from "./testpages/ContextMenu";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/folder" element={<Folder />} />
         <Route path="/bin" element={<Bin />} />
         <Route path="/upload" element={<Upload />} />
+        <Route path="/contextmenu" element={<ContextMenu />} />
       </Routes>
     </BrowserRouter>
   );
