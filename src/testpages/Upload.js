@@ -58,7 +58,7 @@ export default function Upload() {
               onDrop={handleDrop}>
           <input type="file" className={styles.file} onChange={handleUpload} multiple />
           <p className={`${styles.message} ${isActive ? styles.active : ''}`} >
-            Drag and Drop !
+            Drag and Drop!
           </p>
         </label>
       ) : (
@@ -72,6 +72,10 @@ export default function Upload() {
               </button>
             </div>
           ))}
+          <label className={styles.addButton}>
+            <input type="file" className={styles.file} onChange={handleUpload} multiple />
+            <span>+</span>
+          </label>
         </div>
       )}
     </div>

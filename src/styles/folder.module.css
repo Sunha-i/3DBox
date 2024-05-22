@@ -1,16 +1,107 @@
-.folder {
-  width: 100%;
-  height: 100%;
-  background-color: #DFDFE7;
+body {
+  background-color: #63639C;
+  font-family: "ChiKareGo2";
 }
 
-.main {
-  width: 100%;
-  height: 100%;
+@font-face {
+  font-family: "ChiKareGo2";
+  src: url("../../public/assets/fonts/ChiKareGo2.ttf") format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.background {
   display: flex;
 }
 
-.content {
+.folder_zone {
+  background-image: url("../../public/assets/images/folderzone.png");
+  background-repeat: no-repeat;  
+  width: 702px;
+  height: 209px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: center;
+  padding-top: 10px;
+}
+
+.text {
+  width: 100%;
+  height: 15px;
+  font-size: 14px;
+}
+
+.folder_container {
+  width: 100%;
+  height: 160px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 40px 0;
+}
+
+.name {
+  width: 100%;
+  background-color: white;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 16px;
+  padding: 0 3px;
+}
+
+.input {
+  width: 50px;
+  margin: 10px 5px 0 0;
+  font-family: "ChiKareGo2";
+  padding: 0 5px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.button {
+  background-color: #63639C;
+  border-radius: 5px;
+  padding: 3px;
+  font-size: 13px;
+  color: white;
+}
+
+.folder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.trash {
+  background-image: url("../../public/assets/images/trash_empty.png");
+  background-repeat: no-repeat;
+  width: 80px;
+  height: 80px;
+}
+
+.image_zone {
+  background-image: url("../../public/assets/images/filezone.png");
+  background-repeat: no-repeat;
+  width: 1127px;
+  padding: 70px 20px 50px 90px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  position: relative;
+  float: right;
+}
+
+.image_container {
+  background-image: url("../../public/assets/images/imagezone.png");
+  background-repeat: no-repeat;
+}
+
+.image {
+  width: 150px;
+  height: 150px;
+  margin: 4px;
 }
