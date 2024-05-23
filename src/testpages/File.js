@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDrag } from "react-dnd";
 import styles from "../styles/folder.module.css";
 
-function File({ onDelte }) {
+function File({ onDelete }) {
   const [images, setImages] = useState([]);
 
   const importAll = (r) => {
@@ -23,13 +23,13 @@ function File({ onDelte }) {
   return (
     <div className={styles.image_zone}>
       {images.map((src, index) => (
-        <ImageItem key={index} src={src} index={index} onDelte={onDelte} />
+        <ImageItem key={index} src={src} index={index} onDelete={onDelete} />
       ))}
     </div>
   );
 }
 
-function ImageItem({ src, index, onDelte }) {
+function ImageItem({ src, index, onDelete }) {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "image",
     item: { index },
