@@ -3,7 +3,7 @@ import styles from "../styles/folder.module.css";
 import Dragcont from "../components/Dragcont";
 import File from "./File";
 import Trash from "./Trash";
-import { DndProvider } from "react-dnd";
+import { FileProvider } from "../components/ContextFile";
 
 export default function Folder() {
   const [editIndex, setEditIndex] = useState(null);
@@ -43,50 +43,47 @@ export default function Folder() {
   };
 
   return (
-    <div className={styles.background}>
-      <Dragcont>
-        <div className={styles.folder_zone}>
-          <p className={styles.text}>4 items, {} MB available</p>
-          <div className={styles.folder_container}>
-            {folderList.map((name, index) => (
-              <div key={index} className={styles.folder}>
-                <img src="/assets/images/folder.png" alt="folder" />
-                {editIndex === index ? (
-                  <div>
-                    <input
-                      type="text"
-                      value={newName}
-                      onChange={handleInputChange}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      className={styles.input}
-                    />
-                    <button
-                      onClick={() => handleSave(index)}
-                      className={styles.button}
+    <FileProvider>
+      <div className={styles.background}>
+        <Dragcont>
+          <div className={styles.folder_zone}>
+            <p className={styles.text}>4 items, {} MB available</p>
+            <div className={styles.folder_container}>
+              {folderList.map((name, index) => (
+                <div key={index} className={styles.folder}>
+                  <img src="/assets/images/folder.png" alt="folder" />
+                  {editIndex === index ? (
+                    <div>
+                      <input
+                        type="text"
+                        value={newName}
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        className={styles.input}
+                      />
+                      <button
+                        onClick={() => handleSave(index)}
+                        className={styles.button}
+                      >
+                        Save
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      key={index}
+                      className={styles.name}
+                      onDoubleClick={() => handleDoubleClick(index)}
                     >
-                      Save
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    key={index}
-                    className={styles.name}
-                    onDoubleClick={() => handleDoubleClick(index)}
-                  >
-                    {name}
-                  </div>
-                )}
-              </div>
-            ))}
+                      {name}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </Dragcont>
-      <Dragcont>
-        <Trash onDelete={handleDelete} />
-      </Dragcont>
-      <DndProvider onDelete={handleDelete}>
+        </Dragcont>
         <File />
-      </DndProvider>
-    </div>
+      </div>
+    </FileProvider>
   );
 }

@@ -1,18 +1,7 @@
 import React from "react";
-import { useDrop } from "react-dnd";
 import styles from "../styles/folder.module.css";
 
-function Trash({ onDelete }) {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: "image",
-    drop: (item) => {
-      onDelete(item);
-    },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  }));
-
+function Trash({ onDragOver, onDrop, onDelete, isOver }) {
   // 추후 수정
   const backgroundColor = isOver ? "red" : "transparent";
   const backgroundImage = isOver
@@ -21,9 +10,10 @@ function Trash({ onDelete }) {
 
   return (
     <div
-      ref={drop}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
       className={styles.trash}
-      style={{ backgroundColor, backgroundImage }}
+      style={{ backgroundImage }}
     />
   );
 }
