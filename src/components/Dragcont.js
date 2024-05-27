@@ -1,21 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "react-use-gesture";
 
 function Dragcont(props) {
-  const pos = useSpring({ x: 0, y: 0 });
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [dragging, setDragging] = useState(false);
+
+  const { x, y } = useSpring({
+    x: dragging ? position.x : position.x,
+    y: dragging ? position.y : position.y,
+    immediate: dragging,
+  });
 
   const bindPos = useDrag((params) => {
-    pos.x.set(params.offset[0]);
-    pos.y.set(params.offset[1]);
+    setPosition({ x: params.offset[0], y: params.offset[1] });
+    setDragging(params.active);
   });
 
   return (
     <animated.div
       {...bindPos()}
       style={{
-        x: pos.x,
-        y: pos.y,
+        x,
+        y,
       }}
     >
       {props.children}
