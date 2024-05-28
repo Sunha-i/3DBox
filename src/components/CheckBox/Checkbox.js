@@ -13,7 +13,7 @@ function Checkbox({ children, disabled, value, checked, onChange }) {
           disabled={disabled}
           checked={checked}
           onChange={({ target: { checked } }) => onChange(checked)}
-          className={styles.check_btn}
+          className={`${styles.check_btn} ${styles.check}`}
         />
         {children}
       </label>
@@ -25,6 +25,7 @@ function Checkbox({ children, disabled, value, checked, onChange }) {
   return (
     <label className={styles.input}>
       <input
+        className={`${styles.check} ${styles.check}`}
         type="checkbox"
         disabled={isDisabled(disabled)}
         checked={isChecked(value)}

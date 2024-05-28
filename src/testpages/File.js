@@ -1,16 +1,18 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import styles from "../styles/folder.module.css";
 import CheckboxGroup from "../components/CheckBox/CheckboxGroup";
 import Checkbox from "../components/CheckBox/Checkbox";
 import { FileContext } from "../components/ContextFile";
 import Trash from "./Trash";
+import Dragcont from "../components/Dragcont";
 
 function File({ onDelete }) {
   const [images, setImages] = useState([]);
   const [files, setFiles] = useState([]);
   const { setCurrentId } = useContext(FileContext);
   const [isOver, setIsOver] = useState(false);
-  const [curretnImage, setCurrentImage] = useState(null);
+  const [currentImage, setCurrentImage] = useState(null);
+  const loadMoreRef = useRef(null);
 
   const importAll = (r) => {
     return r.keys().map(r);
@@ -52,42 +54,29 @@ function File({ onDelete }) {
   };
 
   return (
-    <div className={styles.image_zone}>
-      <CheckboxGroup values={files} onChange={setFiles}>
-        {images.map((src, index) => (
-          <ImageItem
-            key={index}
-            src={src}
-            index={index}
-            name={`img-${index}`}
-            onDelete={onDelete}
-            onDragStart={onDragStart}
-          />
-        ))}
-      </CheckboxGroup>
-      <Trash onDragOver={onDragOver} onDrop={onDrop} isOver={isOver} />
-    </div>
-  );
-}
+    <>
+      <Dragcont>
+        <Trash onDragOver={onDragOver} onDrop={onDrop} isOver={isOver} />
+      </Dragcont>
 
-function ImageItem({ src, index, name, onDelete, onDragStart }) {
-  const projectId = `project-${index}`;
-
-  const handleDragStart = (e) => {
-    onDragStart(e, projectId);
-  };
-
-  return (
-    <div
-      className={styles.image_container}
-      draggable
-      onDragStart={handleDragStart}
-      style={{ cursor: "move" }}
-    >
-      <Checkbox value={name}>
-        <img src={src} alt={`img-${index}`} className={styles.image} />
-      </Checkbox>
-    </div>
+      <div className={styles.image_zone}>
+        <CheckboxGroup values={files} onChange={setFiles}>
+          {images.map((src, index) => (
+            <div key={index} className={styles.image_container}>
+              <Checkbox value={`img-${index}`}>
+                <img src={src} alt={`img-${index}`} className={styles.image} />
+              </Checkbox>
+              <div
+                className={styles.image_container}
+                draggable
+                onDelete={onDelete}
+                onDragStart={(e) => onDragStart(e, `img-${index}`)}
+              />
+            </div>
+          ))}
+        </CheckboxGroup>
+      </div>
+    </>
   );
 }
 
