@@ -1,6 +1,6 @@
 export var DefaultDimensions = {
-  ROWS: 5,
-  COLS: 5,
+  ROWS: 15,
+  COLS: 15,
 };
 
 export var SquareValue = {

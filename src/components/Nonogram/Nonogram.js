@@ -1,6 +1,7 @@
 import React from "react";
 import { DefaultDimensions, SquareValue } from "./Constants.js";
 import styles from "../../styles/nonogram.module.css";
+import GameData from "./GameData.json";
 
 /**
  * A basic class containing the structure that makes up the hint
@@ -441,7 +442,8 @@ class Nonogram extends React.Component {
 
   render() {
 
-   const current = this.state.current;
+    const current = this.state.current;
+    console.log(GameData[0].answer.length);
 
     return (
       <div
@@ -449,14 +451,14 @@ class Nonogram extends React.Component {
         onContextMenu={(e)=> e.preventDefault()}
         onMouseUp={() => this.appendHistory()}
       >
-        <div className="leftPanel">
+        <div className={styles.leftPanel}>
           <div className={styles.gameInfo}>
             <div>{this.state.timer}</div>
             <div>{(this.winCheck()) ? 'You won!' : ''}</div>
           </div>
         </div>
-        <div className="rightPanel">
-          <div className={styles.lowerBoard}>
+        <div className={styles.rightPanel}>
+          <div className={styles.upperBoard}>
             <Board
               squares={current}
               dimensions={this.state.dimensions}
@@ -466,19 +468,19 @@ class Nonogram extends React.Component {
             <HintNumbers
               currentHints={this.state.currentHints.rows}
               goalHints={this.state.goalHints.rows}
-              area='left'
+              area='right'
               type='row'
             />
           </div>
-          <div className={styles.upperBoard}>
+          <div className={styles.lowerBoard}>
             <HintNumbers
               currentHints={this.state.currentHints.cols}
               goalHints={this.state.goalHints.cols}
-              area='upper'
+              area='lower'
               type='col'
             />
           </div>
-          <span className="material-icons" onClick={() => this.restart()}>replay</span>
+          {/* <span className="material-icons" onClick={() => this.restart()}>replay</span> */}
         </div>
       </div>
     );
