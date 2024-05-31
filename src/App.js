@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Folder from "./testpages/Folder";
@@ -12,9 +12,10 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Navigate to="/login" />}/>
+        <Route path="/home" element={<Home />}/>
         <Route path="/login" element={<Login />} />
-        <Route path="/oauth/redirected/kakao" element={<KakaoRedirectPage />} />
+        <Route path="/oauth/redirected/KAKAO" element={<KakaoRedirectPage />} />
         <Route path="/folder" element={<Folder />} />
         <Route path="/bin" element={<Bin />} />
         <Route path="/upload" element={<Upload />} />

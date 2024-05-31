@@ -14,7 +14,7 @@ export default function Login() {
     setIsPressed(false);
   };
   const handleButtonClick = () => {
-    window.location.href = 'http://localhost:8080/oauth/kakao';
+    window.location.href = 'http://144.24.83.40:8080/oauth/KAKAO';
   };
 
   return (
