@@ -17,24 +17,31 @@ const imagePaths = [
 ];
 
 export default function FolderContents() {
-  const [boxCount, setBoxCount] = useState(11);
-  const [isChecked, setIsChecked] = useState(false);
+  const [boxCount, setBoxCount] = useState(33);
+  const [isChecked, setIsChecked] = useState(Array(imagePaths.length).fill(false));
 
-  const toggleCheck = () => {
-    setIsChecked((prev) => !prev);
+  const toggleCheck = (index) => {
+    setIsChecked((prev) => {
+      const newChecked = [...prev];
+      newChecked[index] = !newChecked[index];
+      return newChecked;
+    });
   };
-
-  const boxes = Array.from({ length: boxCount }, (_, index) => (
-    <div key={index} className={styles.box}>
-      <img src={imagePaths[index]} alt={`Image ${index + 1}`} className={styles.image} />
-    </div>
-  ));
 
   return (
     <div className={styles.container}>
       <object type="image/svg+xml" data="/assets/images/foldercontents.svg">
-        <img src="/assets/images/foldercontents.svg" alt="Upload Zone" />
+        <img src="/assets/images/foldercontents.svg" alt="Folder Window" />
       </object>
+      <div className={styles.titleBar}>
+        <object type="image/svg+xml" data="/assets/images/leftbar.svg">
+          <img src="/assets/images/leftbar.svg" alt="Left Bar" />
+        </object>
+        <div>Folder name</div>
+        <object type="image/svg+xml" data="/assets/images/rightbar.svg">
+          <img src="/assets/images/rightbar.svg" alt="Right Bar" />
+        </object>
+      </div>
       <div className={styles.contentsZone}>
         <div className={styles.actionZone}>
           <div className={styles.folderList}>
@@ -66,16 +73,18 @@ export default function FolderContents() {
           </div>
         </div>
         <div className={styles.gridZone}>
-          <div className={styles.squareBox} onClick={toggleCheck}>
-            <img src={imagePaths[1]} alt="Square Box Image" className={styles.squareImage} />
-            <div className={styles.smallBox}>
-              {isChecked && (
-                <object type="image/svg+xml" data="/assets/images/checkmark.svg" className={styles.check}>
-                  <img src="/assets/images/checkmark.svg" alt="Upload Zone" />
-                </object>
-              )}
+          {imagePaths.map((path, idx) => (
+            <div key={idx} className={styles.squareBox} onClick={() => toggleCheck(idx)}>
+              <img src={path} alt={`Image ${idx + 1}`} className={styles.squareImage} />
+              <div className={styles.smallBox}>
+                {isChecked[idx] && (
+                  <object type="image/svg+xml" data="/assets/images/checkmark.svg" className={styles.check} style={{ pointerEvents: 'none' }}>
+                    <img src="/assets/images/checkmark.svg" alt="Checkmark" />
+                  </object>
+                )}
               </div>
             </div>
+          ))}
         </div>
       </div>
     </div>
