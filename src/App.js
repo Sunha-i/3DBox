@@ -7,6 +7,7 @@ import Bin from "./pages/Bin";
 import KakaoRedirectPage from "./pages/KakaoRedirectPage";
 import Upload from "./testpages/Upload";
 import Game from "./testpages/Game";
+import FolderContents from "./testpages/FolderContents";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
         <Route path="/bin" element={<Bin />} />
         <Route path="/upload" element={<Upload />} />
         <Route path="/nonogram" element={<Game />} />
+        <Route path="/foldercontents" element={<FolderContents />} />
       </Routes>
     </BrowserRouter>
   );
