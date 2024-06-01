@@ -78,8 +78,8 @@ export default function FolderTree() {
 
   return (
     <div className={styles.container}>
-      <object type="image/svg+xml" data="/assets/images/foldertree.svg">
-        <img src="/assets/images/foldertree.svg" alt="Folder Tree" />
+      <object type="image/svg+xml" data="/assets/images/foldertree1.svg">
+        <img src="/assets/images/foldertree1.svg" alt="Folder Tree" />
       </object>
       <div className={styles.treeZone}>
         <RecursiveComp rowData={folder1} paddingLeft={10} />
