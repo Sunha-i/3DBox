@@ -5,6 +5,7 @@ export default function Upload() {
   const [isActive, setActive] = useState(false);
   const [uploadQueue, setUploadQueue] = useState([]);
   const [isPressed, setIsPressed] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
 
   const handleDragStart = () => setActive(true);
   const handleDragEnd = () => setActive(false);
@@ -44,8 +45,34 @@ export default function Upload() {
     setUploadQueue(newFiles);
   };
 
-  const handleUploadFiles = () => {
-    // logic 'll be updated
+  const handleUploadFiles = async () => {
+    // 업로드 api 연결
+    const folderId = 6; // 폴더 경로 추후 수정
+    const formData = new FormData();
+    uploadQueue.forEach(({ file }) => {
+      formData.append('files', file);
+    });
+
+    try {
+      const response = await fetch(`http://144.24.83.40:8080/file/upload/${folderId}`, {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.status === 201) {
+        setIsSaved(true);
+        setUploadQueue([]);
+        // 2초 후에 상태 바꾸기
+        setTimeout(() => {
+          setIsSaved(false);
+        }, 2000);
+      } else {
+        alert('Failed to upload files');
+      }
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      alert('Failed to upload files');
+    }
     console.log("Uploading files:", uploadQueue);
   };
 
@@ -68,9 +95,15 @@ export default function Upload() {
               onDragOver={handleDragOver}
               onDrop={handleDrop}>
           <input type="file" className={styles.file} onChange={handleUpload} multiple />
-          <p className={`${styles.message} ${isActive ? styles.active : ''}`} >
-            Drag and Drop!
-          </p>
+          {isSaved ? (
+            <p className={`${styles.message} ${styles.active}`}>
+              Upload Complete!
+            </p>
+          ) : (
+            <p className={`${styles.message} ${isActive ? styles.active : ''}`}>
+              Drag and Drop!
+            </p>
+          )}
         </label>
       ) : (
         <div className={`${styles.uploadZone} ${isActive ? styles.active : ''}`} 
