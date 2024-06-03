@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { FolderContext } from "../context/FolderContext";
 import styles from "../styles/foldertree.module.css";
 
 export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
-  const [folderInfo, setFolderInfo] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
   const { folderTree } = useContext(FolderContext);
 
   useEffect(() => {
@@ -33,79 +33,67 @@ export default function FolderTree() {
     }));
   };
 
-  const handleFetchFolder = async (id) => {
-    try {
-      const response = await fetch(`http://144.24.83.40:8080/file/${id}`);
-      const data = await response.json();
-      setFolderInfo(data);
-    } catch (error) {
-      console.error("Error fetching folder info:", error);
-      setFolderInfo(null);
-    }
+  const handleSelect = (id) => {
+    setSelectedId(id);
   };
 
-  const RecursiveComp = ({ rowData, paddingLeft }) => {
+  const RecursiveComp = ({ rowData, depth }) => {
+    const paddingLeft = 10 + depth * 17;
+
     return (
-      <div style={{ paddingLeft }}>
+      <>
         <div
-          onClick={() => rowData.type === "folder" && handleToggle(rowData.id)}
-          className={styles.folderItem}
+          style={{ paddingLeft }}
+          onClick={() => {handleSelect(rowData.id)}}
+          className={`${styles.folderItem} ${selectedId === rowData.id ? styles.selected : ''}`}
         >
-          {rowData.type === "folder" && (
-            <span className={styles.arrow}>
-              {toggleStatus[rowData.id] ? "▼" : "▶"}
-            </span>
-          )}
-          {rowData.name}
+          <div className={styles.toggleHash} onClick={(e) => {
+            e.stopPropagation();
+            handleToggle(rowData.id);
+          }}>
+            <span className={styles.arrow}>#</span>
+          </div>
+          <div className={styles.folderName}>
+            {rowData.name}
+          </div>
         </div>
-        {rowData.type === "folder" &&
-          toggleStatus[rowData.id] &&
-          rowData.children.map((v) => (
-            <RecursiveComp
-              key={v.id}
-              rowData={v}
-              paddingLeft={paddingLeft + 10}
-            />
-          ))}
-        {rowData.type === "file" && (
-          <button
-            onClick={() => handleFetchFolder(rowData.id)}
-            className={styles.fetchButton}
-          >
-            Fetch Info
-          </button>
-        )}
-      </div>
-    );
+        {rowData.type === "folder" && toggleStatus[rowData.id] && rowData.children.map((v) => (
+          <RecursiveComp key={v.id} rowData={v} depth={depth + 1} />
+        ))}
+      </>
+    );    
   };
 
   return (
-    <>
-      <div className={styles.container}>
-        <object type="image/svg+xml" data="/assets/images/foldertree1.svg">
-          <img src="/assets/images/foldertree1.svg" alt="Folder Tree" />
-        </object>
-        <div className={styles.treeZone}>
-          {Array.isArray(folderTree) ? (
-            folderTree.map((child) => (
-              <RecursiveComp key={child.id} rowData={child} paddingLeft={10} />
-            ))
-          ) : (
-            <p>Loading folder structure...</p>
-          )}
+    
+
+    <div className={styles.container}>
+      <object type="image/svg+xml" data="/assets/images/foldertree.svg">
+        <img src="/assets/images/foldertree.svg" alt="Folder Tree" />
+      </object>
+      <div className={styles.treeZone}>
+        {Array.isArray(folderTree) ? (
+          folderTree.map((child) => (
+            <RecursiveComp key={child.id} rowData={child} depth={0} />
+          ))
+        ) : (
+          <p>Loading folder structure...</p>
+        )}
+        <div className={styles.divisionLine}>
+          <div style={{ backgroundColor: "#ddd" }} className={styles.line} />
+          <div style={{ backgroundColor: "#bbb" }} className={styles.line} />
+          <div style={{ backgroundColor: "#999" }} className={styles.line} />
+          <div style={{ backgroundColor: "#fff" }} className={styles.line} />
+        </div>
+        <div onClick={() => {handleSelect(null)}}
+          className={`${styles.userRoot} ${selectedId === null ? styles.userRootSelected : ''}`}
+        >
+          <object type="image/svg+xml" data="/assets/images/osface.svg" className={styles.faceIcon}>
+            <img src="/assets/images/osface.svg" alt="Face Icon" />
+          </object>
+          <div className={styles.userText}>Sunha's folder list</div>
         </div>
       </div>
-      <div className={styles.container}>
-        {folderInfo && (
-          <div className={styles.fileInfo}>
-            <h3>File Information</h3>
-            <p>ID: {folderInfo.id}</p>
-            <p>Name: {folderInfo.name}</p>
-            <p>Type: {folderInfo.type}</p>
-            {/* Add more fields as necessary */}
-          </div>
-        )}
-      </div>
-    </>
+    </div>
   );
 }
