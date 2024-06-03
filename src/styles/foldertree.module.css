@@ -1,7 +1,4 @@
 .container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   /* set center */
   position: absolute;
   top: 50%;
@@ -19,4 +16,64 @@
   box-shadow: inset 1px 1px 0px #262626, 
               inset 2px 2px 0px #ffffff, 
               -1px -1px rgba(38, 38, 38, 0.4);
+}
+
+.folderItem {
+  height: 18px;
+  font-size: 14px;
+  box-sizing: border-box;
+  margin-top: 1px;
+  display: flex;
+}
+
+.toggleHash {
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.folderName {
+  line-height: 18px;
+  cursor: default;
+}
+
+.divisionLine {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1px;
+  padding-left: 2px;
+}
+
+.line {
+  width: 100%;
+  height: 0.5px;
+}
+
+.tmpdiv {
+  border: 1px solid #262626;
+}
+
+.arrow {
+  margin-right: 3px;
+}
+
+.selected {
+  background-color: #474764;
+  color: #fff;
+}
+
+.userRoot {
+  height: 16px;
+  display: flex;
+  font-size: 14px;
+  padding: 3px 0px;
+  line-height: 16px;
+}
+
+.userRootSelected {
+  background-color: #474764;
+  color: #fff;
+}
+
+.faceIcon {
+  margin: 0px 5px;
 }
