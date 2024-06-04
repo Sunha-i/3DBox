@@ -1,13 +1,11 @@
 .container {
-  /* set center */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  background-image: url('/public/assets/images/foldertree.svg');
+  width: 279px;
+  height: 567px;
 }
 
 .treeZone {
-  position: absolute;
+  position: relative;
   top: 20px;
   left: 5px;
   width: 253px;

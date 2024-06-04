@@ -85,9 +85,6 @@ export default function Upload() {
 
   return (
     <div className={styles.container}>
-      <object type="image/svg+xml" data="/assets/images/uploadzone.svg">
-        <img src="/assets/images/uploadzone.svg" alt="Upload Zone" />
-      </object>
       {uploadQueue.length === 0 ? (
         <label className={`${styles.dragZone} ${isActive ? styles.active : ''}`} 
               onDragEnter={handleDragStart}
