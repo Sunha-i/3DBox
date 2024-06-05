@@ -1,13 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import styles from "../styles/foldercontents.module.css";
 import { handleDownload, handleMoveToTrash } from "../api/file";
 import { createFolder } from "../api/folder";
-import ContextMenu from "./ContextMenu";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function FolderContents() {
+  const { folderId: paramFolderId } = useParams();
+
+  const navigate = useNavigate();
+
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
+  const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
 
@@ -30,21 +35,27 @@ export default function FolderContents() {
   }, [newName, newFolderName]);
 
   useEffect(() => {
-    // 외부 요소 클릭 이벤트 추가
+    // input 바깥 눌렀을 때
     const handleClick = (event) => {
-      if (editIndex !== null && inputRef.current && !inputRef.current.contains(event.target)) {
+      if (
+        editIndex !== null &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
         changeFolderName(editIndex);
-      } else if (isCreating && inputRef.current && !inputRef.current.contains(event.target)) {
+      } else if (
+        isCreating &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
         handleCreateFolder();
-      } 
+      }
     };
-    
     document.addEventListener("click", handleClick);
-
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [newName, newFolderName]);
+  }, [newName, newFolderName, editIndex, isCreating]);
 
   const toggleCheck = (index) => {
     setIsChecked((prev) => {
@@ -74,10 +85,10 @@ export default function FolderContents() {
 
   // 폴더 이름 수정
   const changeFolderName = async (index) => {
-    const folderId = folderList[index].folder_id;
+    const selectedFolderId = folderList[index].folder_id;
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/${folderId}/name/${newName}`,
+        `http://144.24.83.40:8080/folder/${selectedFolderId}/name/${newName}`,
         {
           method: "PATCH",
           headers: {
@@ -109,10 +120,10 @@ export default function FolderContents() {
   };
 
   // 폴더 내 파일 정보 조회
-  const fetchFileData = async () => {
+  const fetchFileData = async (id) => {
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/child/file/${rootFolderId}`
+        `http://144.24.83.40:8080/folder/child/file/${id}`
       );
       const data = await response.json();
       console.log("File", data.files);
@@ -125,11 +136,11 @@ export default function FolderContents() {
     }
   };
 
-  // 하위 폴더 조회
-  const fetchFolderData = async () => {
+  // 폴더 내 하위 폴더 조회
+  const fetchFolderData = async (id) => {
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/child/folder/${rootFolderId}`
+        `http://144.24.83.40:8080/folder/child/folder/${id}`
       );
       const data = await response.json();
       console.log("Folder", data.folders);
@@ -152,8 +163,10 @@ export default function FolderContents() {
       await handleMoveToTrash(fileId);
     }
 
-    // Filter out the trashed files from fileList and imagePaths
-    const updatedFileList = filesList.filter((file) => !selectedFileIds.includes(file.file_id));
+    // 파일 휴지통 이동 후 재정렬
+    const updatedFileList = filesList.filter(
+      (file) => !selectedFileIds.includes(file.file_id)
+    );
     const updatedImagePaths = updatedFileList.map((file) => file.s3_key);
 
     setFileList(updatedFileList);
@@ -162,23 +175,64 @@ export default function FolderContents() {
   };
 
   useEffect(() => {
-    fetchFileData();
-    fetchFolderData();
-  }, [rootFolderId]);
+    setFolderId(paramFolderId || rootFolderId);
+  }, [paramFolderId, rootFolderId]);
 
-  const handleCreateFolder = async () => {
-    setIsCreating(true);
-    try {
-      const newFolder = await createFolder(newFolderName, userId, rootFolderId);
-      if (newFolder) {
-        setFolderList([...folderList, { folder_id: newFolder.FolderId, folder_name: newFolder.FolderName }]);
-        setNewFolderName("New folder");
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchFileData(folderId);
+      await fetchFolderData(folderId);
+    };
+    fetchData();
+  }, [folderId]);
+
+  // 브라우저 뒤로 가기 눌렀을 때 이전 페이지 표시하도록
+  useEffect(() => {
+    const handlePopState = () => {
+      const currentFolderId = window.location.pathname.split("/").pop();
+      setFolderId(currentFolderId || rootFolderId);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [folderId, rootFolderId]);
+
+  const handleFolderClick = (folderId) => {
+    console.log("child", folderId);
+    navigate(`/foldercontents/${folderId}`);
+    fetchFileData(folderId);
+    fetchFolderData(folderId);
+  };
+
+  const handleCreateFolder = useMemo(
+    () => async () => {
+      setIsCreating(true);
+      try {
+        const newFolder = await createFolder(newFolderName, userId, folderId);
+        if (newFolder) {
+          // 폴더 생성 후 로딩 상태 해제
+          setIsCreating(false);
+
+          setFolderList([
+            ...folderList,
+            {
+              folder_id: newFolder.FolderId,
+              folder_name: newFolder.FolderName,
+            },
+          ]);
+          setNewFolderName("New folder");
+          fetchFolderData(folderId); // 새로 생성한 폴더 포함하도록 폴더 목록 갱신
+        }
+      } catch (error) {
+        console.error("Error creating new folder:", error);
         setIsCreating(false);
       }
-    } catch (error) {
-      console.error("Error creating new folder:", error);
-    }
-  };
+    },
+    [createFolder, newFolderName, folderList, userId, rootFolderId]
+  );
 
   return (
     <div className={styles.container}>
@@ -198,7 +252,11 @@ export default function FolderContents() {
         <div className={styles.actionZone}>
           <div className={styles.childFolders}>
             {folderList.map((folder, index) => (
-              <div key={folder.folder_id} className={styles.folderList}>
+              <div
+                key={folder.folder_id}
+                className={styles.folderList}
+                onClick={() => handleFolderClick(folder.folder_id)}
+              >
                 <object type="image/svg+xml" data="/assets/images/folder.svg">
                   <img src="/assets/images/folder.svg" alt="Upload Zone" />
                 </object>

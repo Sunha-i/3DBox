@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { FolderContext } from "../context/FolderContext";
 import styles from "../styles/foldertree.module.css";
-import Dragcont from "../components/Dragcont";
 
 export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
@@ -81,7 +80,7 @@ export default function FolderTree() {
   };
 
   return (
-    <Dragcont>
+    <>
       <div className={styles.container}>
         <object type="image/svg+xml" data="/assets/images/foldertree1.svg">
           <img src="/assets/images/foldertree1.svg" alt="Folder Tree" />
@@ -107,6 +106,6 @@ export default function FolderTree() {
           </div>
         )}
       </div>
-    </Dragcont>
+    </>
   );
 }
