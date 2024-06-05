@@ -72,7 +72,9 @@ export default function FolderTree() {
             <RecursiveComp key={child.id} rowData={child} depth={0} />
           ))
         ) : (
-          <p>Loading folder structure...</p>
+          <p className={styles.loadingText}>
+            Loading folder structure...
+          </p>
         )}
         <div className={styles.divisionLine}>
           <div style={{ backgroundColor: "#ddd" }} className={styles.line} />

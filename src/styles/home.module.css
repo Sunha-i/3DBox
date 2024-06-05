@@ -29,3 +29,9 @@
   top: 280px;
   left: 100px;
 }
+
+.folderContentsBox {
+  position: absolute;
+  top: 250px;
+  left: 450px;
+}

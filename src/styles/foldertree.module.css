@@ -35,6 +35,10 @@
   cursor: default;
 }
 
+.loadingText {
+  padding-left: 7px;
+}
+
 .divisionLine {
   display: flex;
   flex-direction: column;

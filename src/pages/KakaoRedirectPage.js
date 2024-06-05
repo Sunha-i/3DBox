@@ -34,7 +34,7 @@ function KakaoRedirectPage() {
   useEffect(() => {
     if (!isLoading) {
       const timer = setTimeout(() => {
-        navigate("/upload");
+        navigate("/home");
       }, 1500);
       return () => clearTimeout(timer); 
     }

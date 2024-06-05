@@ -227,7 +227,7 @@ export default function FolderContents() {
               folder_name: newFolder.FolderName,
             },
           ]);
-          setNewFolderName("New folder");
+          setNewFolderName("Untitled Folder");
           fetchFolderData(folderId); // 새로 생성한 폴더 포함하도록 폴더 목록 갱신
         }
       } catch (error) {
@@ -240,9 +240,6 @@ export default function FolderContents() {
 
   return (
     <div className={styles.container}>
-      <object type="image/svg+xml" data="/assets/images/foldercontents.svg">
-        <img src="/assets/images/foldercontents.svg" alt="Folder Window" />
-      </object>
       <div className={styles.titleBar}>
         <object type="image/svg+xml" data="/assets/images/leftbar.svg">
           <img src="/assets/images/leftbar.svg" alt="Left Bar" />
