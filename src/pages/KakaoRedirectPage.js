@@ -14,7 +14,9 @@ function KakaoRedirectPage() {
       // 카카오로부터 받아온 code를 서버에 전달. 카카오로 회원가입 & 로그인
       const response = await axios.get(`http://144.24.83.40:8080/oauth/login/KAKAO?code=${code}`);
       const data = response.data;
-      localStorage.setItem("userId", data);
+      console.log(data);
+      localStorage.setItem("userId", data.userId);
+      localStorage.setItem("rootFolderId", data.rootFolderId)
       setIsLoading(false);
     } catch (error) {
       console.error("Error");
