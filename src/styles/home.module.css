@@ -1,0 +1,31 @@
+.menuBar {
+  height: 20px;
+  background-color: #ddd;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  box-shadow: inset 0px -1px 0px #bbb,
+              inset 0px 1px 0px #eee;
+  display: flex;
+}
+
+.menuContents {
+  line-height: 20px;
+  margin: 0px 10px;
+  font-size: 15px;
+}
+
+.menuResizer {
+  margin-bottom: 1px;
+}
+
+.uploadBox {
+  position: absolute;
+  top: 90px;
+  left: 100px;
+}
+
+.folderTreeBox {
+  position: absolute;
+  top: 280px;
+  left: 100px;
+}

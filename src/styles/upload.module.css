@@ -25,6 +25,9 @@
 .dragZone:hover .message {
   color: #eeeeee;
 }
+.dragZone {
+  cursor: pointer;
+}
 
 .file {
   display: none;

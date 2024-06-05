@@ -8,11 +8,22 @@ export default function Home() {
   
   return (
     <div className={styles.container}>
+      <div className={styles.menuBar}>
+        <div className={`${styles.menuContents} ${styles.logOut}`}>LogOut</div>
+        <object type="image/svg+xml" data="/assets/images/menuResizer.svg" className={styles.menuResizer}>
+          <img src="/assets/images/menuResizer.svg" alt="Menu Resizer" />
+        </object>
+        <div className={`${styles.menuContents} ${styles.userName}`}>Sunha</div>
+      </div>
       <Dragcont>
-        <Upload />
+        <div className={styles.uploadBox}>
+          <Upload />
+        </div>
       </Dragcont>
       <Dragcont>
-        <FolderTree />
+        <div className={styles.folderTreeBox}>
+          <FolderTree />
+        </div>
       </Dragcont>
     </div>
   );
