@@ -19,7 +19,7 @@ export default function FolderContents() {
   const [editIndex, setEditIndex] = useState(null);
   const [newName, setNewName] = useState("");
   const [newFolderName, setNewFolderName] = useState("New folder");
-  const [filesList, setFileList] = useState([]);
+  const [fileList, setFileList] = useState([]);
   const [folderList, setFolderList] = useState([]);
   const [imagePaths, setImagePaths] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -63,7 +63,7 @@ export default function FolderContents() {
       if (newChecked[index]) {
         newChecked[index] = false;
       } else {
-        newChecked[index] = filesList[index].file_id;
+        newChecked[index] = fileList[index].file_id;
       }
       console.log(newChecked);
       return newChecked;
@@ -164,7 +164,7 @@ export default function FolderContents() {
     }
 
     // 파일 휴지통 이동 후 재정렬
-    const updatedFileList = filesList.filter(
+    const updatedFileList = fileList.filter(
       (file) => !selectedFileIds.includes(file.file_id)
     );
     const updatedImagePaths = updatedFileList.map((file) => file.s3_key);
@@ -177,7 +177,7 @@ export default function FolderContents() {
   useEffect(() => {
     setFolderId(paramFolderId || rootFolderId);
   }, [paramFolderId, rootFolderId]);
-
+  
   useEffect(() => {
     const fetchData = async () => {
       await fetchFileData(folderId);
@@ -205,6 +205,10 @@ export default function FolderContents() {
     navigate(`/foldercontents/${folderId}`);
     fetchFileData(folderId);
     fetchFolderData(folderId);
+  };
+
+  const prevFolderClick = () => {
+    navigate(-1);
   };
 
   const handleCreateFolder = useMemo(
@@ -346,7 +350,7 @@ export default function FolderContents() {
                   />
                 </object>
               </button>
-              <button className={styles.toolBtn}>
+              <button className={styles.toolBtn} onClick={prevFolderClick}>
                 <object
                   type="image/svg+xml"
                   data="/assets/images/newfolder.svg"
@@ -374,37 +378,41 @@ export default function FolderContents() {
           </div>
         </div>
         <div className={styles.gridZone}>
-          {imagePaths.map((path, idx) => (
-            <div
-              key={idx}
-              className={`${styles.squareBox} ${
-                isZoomed ? styles.zoomedBox : ""
-              }`}
-              onClick={() => toggleCheck(idx)}
-            >
-              <img
-                src={path}
-                alt={`Image ${idx + 1}`}
-                className={styles.squareImage}
-              />
+        {fileList && fileList.length > 0? (
+            imagePaths.map((path, idx) => (
               <div
-                className={`${styles.smallBox} ${
-                  isZoomed ? styles.zoomedSmall : ""
+                key={idx}
+                className={`${styles.squareBox} ${
+                  isZoomed ? styles.zoomedBox : ""
                 }`}
+                onClick={() => toggleCheck(idx)}
               >
-                {isChecked[idx] && (
-                  <object
-                    type="image/svg+xml"
-                    data="/assets/images/checkmark.svg"
-                    className={styles.check}
-                    style={{ pointerEvents: "none" }}
-                  >
-                    <img src="/assets/images/checkmark.svg" alt="Checkmark" />
-                  </object>
-                )}
+                <img
+                  src={path}
+                  alt={`image ${idx + 1}`}
+                  className={styles.squareImage}
+                />
+                <div
+                  className={`${styles.smallBox} ${
+                    isZoomed ? styles.zoomedSmall : ""
+                  }`}
+                >
+                  {isChecked[idx] && (
+                    <object
+                      type="image/svg+xml"
+                      data="/assets/images/checkmark.svg"
+                      className={styles.check}
+                      style={{ pointerEvents: "none" }}
+                    >
+                      <img src="/assets/images/checkmark.svg" alt="Checkmark" />
+                    </object>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ):(
+            <div>No files in this folder</div>
+          ) }
         </div>
       </div>
     </div>
