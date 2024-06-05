@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styles from "../styles/foldercontents.module.css";
 import { handleDownload, handleMoveToTrash } from "../api/file";
 import { createFolder } from "../api/folder";
+import ContextMenu from "./ContextMenu";
 
 export default function FolderContents() {
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
@@ -19,6 +20,7 @@ export default function FolderContents() {
   const [isCreating, setIsCreating] = useState(false);
 
   const spanRef = useRef(null);
+  const inputRef = useRef(null);
   const [inputWidth, setInputWidth] = useState(0);
 
   useEffect(() => {
@@ -27,10 +29,26 @@ export default function FolderContents() {
     }
   }, [newName, newFolderName]);
 
+  useEffect(() => {
+    // 외부 요소 클릭 이벤트 추가
+    const handleClick = (event) => {
+      if (editIndex !== null && inputRef.current && !inputRef.current.contains(event.target)) {
+        changeFolderName(editIndex);
+      } else if (isCreating && inputRef.current && !inputRef.current.contains(event.target)) {
+        handleCreateFolder();
+      } 
+    };
+    
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, [newName, newFolderName]);
+
   const toggleCheck = (index) => {
     setIsChecked((prev) => {
       const newChecked = [...prev];
-      // newChecked[index] = !newChecked[index];
       if (newChecked[index]) {
         newChecked[index] = false;
       } else {
@@ -53,10 +71,6 @@ export default function FolderContents() {
   const handleInputChange = (e) => {
     setNewName(e.target.value);
   };
-
-  const handleNewFolderInputChange = (e) => {
-    setNewFolderName(e.target.value);
-  }
 
   // 폴더 이름 수정
   const changeFolderName = async (index) => {
@@ -86,7 +100,11 @@ export default function FolderContents() {
 
   const handleKeyDown = (e, index) => {
     if (e.key === "Enter") {
-      changeFolderName(index);
+      if (index !== null) {
+        changeFolderName(index);
+      } else if (isCreating) {
+        handleCreateFolder();
+      }
     }
   };
 
@@ -148,6 +166,20 @@ export default function FolderContents() {
     fetchFolderData();
   }, [rootFolderId]);
 
+  const handleCreateFolder = async () => {
+    setIsCreating(true);
+    try {
+      const newFolder = await createFolder(newFolderName, userId, rootFolderId);
+      if (newFolder) {
+        setFolderList([...folderList, { folder_id: newFolder.FolderId, folder_name: newFolder.FolderName }]);
+        setNewFolderName("New folder");
+        setIsCreating(false);
+      }
+    } catch (error) {
+      console.error("Error creating new folder:", error);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <object type="image/svg+xml" data="/assets/images/foldercontents.svg">
@@ -175,6 +207,7 @@ export default function FolderContents() {
                   <div>
                     <input
                       type="text"
+                      ref={inputRef}
                       value={newName}
                       onChange={handleInputChange}
                       onKeyDown={(e) => handleKeyDown(e, index)}
@@ -196,24 +229,6 @@ export default function FolderContents() {
                 )}
               </div>
             ))}
-            {isCreating && <div className={styles.folderList}>
-              <object type="image/svg+xml" data="/assets/images/folder.svg">
-                <img src="/assets/images/folder.svg" alt="Upload Zone" />
-              </object>
-              <div className={styles.blankBox}></div>
-              <div>
-                <input
-                  type="text"
-                  value={newFolderName}
-                  onChange={handleNewFolderInputChange}
-                  className={styles.input}
-                  style={{ width: `${inputWidth}px` }}
-                />
-                <span ref={spanRef} className={styles.hiddenSpan}>
-                  {newFolderName}
-                </span>
-              </div>
-            </div>}
           </div>
           <div className={styles.options}>
             <div className={styles.toolBar}>
@@ -261,7 +276,7 @@ export default function FolderContents() {
                   <img src="/assets/images/delete.svg" alt="Delete" />
                 </object>
               </button>
-              <button className={styles.toolBtn} onClick={() => setIsCreating(!isCreating)}>
+              <button className={styles.toolBtn} onClick={handleCreateFolder}>
                 <object
                   type="image/svg+xml"
                   data="/assets/images/newfolder.svg"
