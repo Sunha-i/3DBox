@@ -1,21 +1,20 @@
 .container {
-  /* set center */
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  background-image: url('/public/assets/images/foldertree.svg');
+  width: 279px;
+  height: 567px;
 }
 
 .treeZone {
-  position: absolute;
+  position: relative;
   top: 20px;
   left: 5px;
-  width: 253px;
-  height: 530px;
+  width: 251px;
+  height: 529px;
   background-color: #dddddd;
   box-shadow: inset 1px 1px 0px #262626, 
               inset 2px 2px 0px #ffffff, 
               -1px -1px rgba(38, 38, 38, 0.4);
+  padding: 1px 0px 0px 2px;
 }
 
 .folderItem {
