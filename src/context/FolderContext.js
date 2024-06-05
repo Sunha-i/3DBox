@@ -4,6 +4,7 @@ export const FolderContext = createContext();
 
 export const FolderProvider =({ children }) => {
   const [folderTree, setFolderTree] = useState(null);
+  const rootFolderId = localStorage.getItem("rootFolderId");
 
   const fetchFolderData = async (folderId) => {
     try {
@@ -32,14 +33,15 @@ export const FolderProvider =({ children }) => {
   };
 
   const initializeFolderTree = async () => {
-    const rootFolderId = 2;  // Root folder ID (하드코딩)
-    const rootFolderChildren = await buildFolderTree(rootFolderId);
-    setFolderTree(rootFolderChildren);
+    if (rootFolderId !== null) {
+      const rootFolderChildren = await buildFolderTree(rootFolderId);
+      setFolderTree(rootFolderChildren);
+    }
   };
 
   useEffect(() => {
     initializeFolderTree();
-  }, []);
+  }, [rootFolderId]);
 
   return (
     <FolderContext.Provider value={{ folderTree }}>

@@ -27,7 +27,8 @@ export default function App() {
           <Route path="/bin" element={<Bin />} />
           <Route path="/upload" element={<Upload />} />
           <Route path="/nonogram" element={<Game />} />
-          <Route path="/foldercontents" element={<FolderContents />} />
+          <Route path="/foldercontents/" element={<FolderContents />} />
+          <Route path="/foldercontents/:id" element={<FolderContents />} />
           <Route path="/foldertree" element={<FolderTree />} />
         </Routes>
       </BrowserRouter>
