@@ -1,12 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import styles from "../styles/home.module.css";
 import Dragcont from "../components/Dragcont";
 import Upload from "../testpages/Upload";
 import FolderTree from "../testpages/FolderTree";
 import FolderContents from "../testpages/FolderContents";
+import { useParams } from "react-router-dom";
 
 export default function Home() {
-  
+  const {id: folderId} = useParams();
   return (
     <div className={styles.container}>
       <div className={styles.menuBar}>
@@ -28,7 +29,7 @@ export default function Home() {
       </Dragcont>
       <Dragcont>
         <div className={styles.folderContentsBox}>
-          <FolderContents />
+          <FolderContents folderId={folderId} />
         </div>
       </Dragcont>
     </div>
