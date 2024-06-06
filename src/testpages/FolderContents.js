@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
 import styles from "../styles/foldercontents.module.css";
 import { handleDownload, handleMoveToTrash } from "../api/file";
 import { createFolder } from "../api/folder";
 import { useNavigate } from "react-router-dom";
+import { FolderContext } from "../context/FolderContext";
 
 export default function FolderContents({folderId}) {
   const navigate = useNavigate();
 
+  const { uploadImages } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
@@ -86,7 +88,7 @@ export default function FolderContents({folderId}) {
     const selectedFolderId = folderList[index].folder_id;
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/${selectedFolderId}/name/${newName}`,
+        `http://3.38.95.127:8080/folder/${selectedFolderId}/name/${newName}`,
         {
           method: "PATCH",
           headers: {
@@ -121,7 +123,7 @@ export default function FolderContents({folderId}) {
   const fetchFileData = async (id) => {
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/child/file/${id}`
+        `http://3.38.95.127:8080/folder/child/file/${id}`
       );
       const data = await response.json();
       console.log("File", data.files);
@@ -138,7 +140,7 @@ export default function FolderContents({folderId}) {
   const fetchFolderData = async (id) => {
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/child/folder/${id}`
+        `http://3.38.95.127:8080/folder/child/folder/${id}`
       );
       const data = await response.json();
       console.log("Folder", data.folders);
@@ -176,7 +178,7 @@ export default function FolderContents({folderId}) {
     const id = folderId || rootFolderId;
     fetchFileData(id);
     fetchFolderData(id);
-  }, [folderId, rootFolderId]);
+  }, [folderId, rootFolderId, uploadImages]);
 
   const handleFolderClick = (folderId) => {
     navigate(`/home/${folderId}`);
