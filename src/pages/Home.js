@@ -5,9 +5,22 @@ import Upload from "../testpages/Upload";
 import FolderTree from "../testpages/FolderTree";
 import FolderContents from "../testpages/FolderContents";
 import { useParams } from "react-router-dom";
+import Bin from "../testpages/Bin";
 
 export default function Home() {
-  const {id: folderId} = useParams();
+  const { id: folderId } = useParams();
+  const [isTrashOpen, setIsTrashOpen] = useState(false);
+
+  const handleTrashDoubleClick = () => {
+    if (!isTrashOpen) {
+      setIsTrashOpen(true);
+    }
+  };
+
+  const handleCloseBin = () => {
+    setIsTrashOpen(false);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.menuBar}>
@@ -32,6 +45,22 @@ export default function Home() {
           <FolderContents folderId={folderId} />
         </div>
       </Dragcont>
+      <div 
+        className={`${styles.trashIcon} ${isTrashOpen ? styles.open : ''}`} 
+        onDoubleClick={handleTrashDoubleClick}
+      >
+        <object type="image/svg+xml" data="/assets/images/trashempty.svg">
+          <img src="/assets/images/trashempty.svg" alt="Recycle Bin" />
+        </object>
+        <div>Trash</div>
+      </div>
+      {isTrashOpen && (
+        <Dragcont>
+          <div className={`${styles.binBox} ${isTrashOpen ? styles.open : ''}`}>
+            <Bin onClose={handleCloseBin} />
+          </div>
+        </Dragcont>
+      )}
     </div>
   );
 }
