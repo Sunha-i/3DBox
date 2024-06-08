@@ -17,7 +17,10 @@ function KakaoRedirectPage() {
       console.log(data);
       localStorage.setItem("userId", data.userId);
       localStorage.setItem("rootFolderId", data.rootFolderId)
-      setIsLoading(false);
+      const timer = setTimeout(() => {
+        setIsLoading(false);
+      }, 1200);
+      return () => clearTimeout(timer); 
     } catch (error) {
       console.error("Error");
     }
@@ -35,7 +38,7 @@ function KakaoRedirectPage() {
     if (!isLoading) {
       const timer = setTimeout(() => {
         navigate("/home");
-      }, 1500);
+      }, 1200);
       return () => clearTimeout(timer); 
     }
   }, [isLoading, navigate]);
@@ -49,12 +52,16 @@ function KakaoRedirectPage() {
           <img src="/assets/images/projectdesc.svg" alt="Project Description" />
       </object>
       <div className={styles.spinnerContainer}>
-        {isLoading &&
-          <div class={styles.loadingSpinner}>
-            <div/><div/><div/><div/><div/><div/><div/><div/><div/><div/><div/><div/>
-          </div>
-        }
-        <div className={styles.loadingText}>{isLoading ? "Loading" : "Login Successful!"}</div>
+        {isLoading ? (
+          <>
+            <div class={styles.loadingSpinner}>
+              <div/><div/><div/><div/><div/><div/><div/><div/><div/><div/><div/><div/>
+            </div>
+            <div className={styles.loadingText}>Loading</div>
+          </>
+        ) : (
+          <div className={styles.loginSuccess}>Login Successful!</div>
+        )}
       </div>
     </div>
   );
