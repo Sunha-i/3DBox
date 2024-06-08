@@ -2,13 +2,18 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const FolderContext = createContext();
 
-export const FolderProvider =({ children }) => {
+export const FolderProvider = ({ children }) => {
   const [folderTree, setFolderTree] = useState(null);
+  const [selectedId, setSelectedId] = useState(null);
+  const [uploadImages, setUploadImages] = useState([]);
+  
   const rootFolderId = localStorage.getItem("rootFolderId");
 
   const fetchFolderData = async (folderId) => {
     try {
-      const response = await fetch(`http://144.24.83.40:8080/folder/child/folder/${folderId}`);
+      const response = await fetch(
+        `http://3.38.95.127:8080/folder/child/folder/${folderId}`
+      );
       const data = await response.json();
       console.log(data.folders);
       return data.folders;
@@ -25,7 +30,7 @@ export const FolderProvider =({ children }) => {
         id: folder.folder_id.toString(),
         type: "folder",
         name: folder.folder_name,
-        children: await buildFolderTree(folder.folder_id, folder.folder_name)
+        children: await buildFolderTree(folder.folder_id, folder.folder_name),
       }))
     );
 
@@ -44,8 +49,8 @@ export const FolderProvider =({ children }) => {
   }, [rootFolderId]);
 
   return (
-    <FolderContext.Provider value={{ folderTree }}>
+    <FolderContext.Provider value={{ folderTree, selectedId, setSelectedId, uploadImages, setUploadImages }}>
       {children}
     </FolderContext.Provider>
   );
-}
+};

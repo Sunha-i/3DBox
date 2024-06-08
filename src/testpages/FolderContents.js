@@ -1,18 +1,18 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
 import styles from "../styles/foldercontents.module.css";
 import { handleDownload, handleMoveToTrash } from "../api/file";
 import { createFolder } from "../api/folder";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { FolderContext } from "../context/FolderContext";
 
-export default function FolderContents() {
-  const { folderId: paramFolderId } = useParams();
-
+export default function FolderContents({folderId}) {
   const navigate = useNavigate();
 
+  const { uploadImages } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
-  const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
+  //const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
 
@@ -88,7 +88,7 @@ export default function FolderContents() {
     const selectedFolderId = folderList[index].folder_id;
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/${selectedFolderId}/name/${newName}`,
+        `http://3.38.95.127:8080/folder/${selectedFolderId}/name/${newName}`,
         {
           method: "PATCH",
           headers: {
@@ -123,7 +123,7 @@ export default function FolderContents() {
   const fetchFileData = async (id) => {
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/child/file/${id}`
+        `http://3.38.95.127:8080/folder/child/file/${id}`
       );
       const data = await response.json();
       console.log("File", data.files);
@@ -140,7 +140,7 @@ export default function FolderContents() {
   const fetchFolderData = async (id) => {
     try {
       const response = await fetch(
-        `http://144.24.83.40:8080/folder/child/folder/${id}`
+        `http://3.38.95.127:8080/folder/child/folder/${id}`
       );
       const data = await response.json();
       console.log("Folder", data.folders);
@@ -173,36 +173,15 @@ export default function FolderContents() {
     setImagePaths(updatedImagePaths);
     setIsChecked(new Array(updatedImagePaths.length).fill(false));
   };
-
-  useEffect(() => {
-    setFolderId(paramFolderId || rootFolderId);
-  }, [paramFolderId, rootFolderId]);
   
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchFileData(folderId);
-      await fetchFolderData(folderId);
-    };
-    fetchData();
-  }, [folderId]);
-
-  // 브라우저 뒤로 가기 눌렀을 때 이전 페이지 표시하도록
-  useEffect(() => {
-    const handlePopState = () => {
-      const currentFolderId = window.location.pathname.split("/").pop();
-      setFolderId(currentFolderId || rootFolderId);
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, [folderId, rootFolderId]);
+    const id = folderId || rootFolderId;
+    fetchFileData(id);
+    fetchFolderData(id);
+  }, [folderId, rootFolderId, uploadImages]);
 
   const handleFolderClick = (folderId) => {
-    console.log("child", folderId);
-    navigate(`/foldercontents/${folderId}`);
+    navigate(`/home/${folderId}`);
     fetchFileData(folderId);
     fetchFolderData(folderId);
   };

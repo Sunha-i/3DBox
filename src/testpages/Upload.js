@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styles from "../styles/upload.module.css";
+import { useParams } from "react-router-dom";
+import { FolderContext } from "../context/FolderContext";
 
 export default function Upload() {
+  const {id: folderId} = useParams();
+  const { setUploadImages } = useContext(FolderContext);
+  
   const [isActive, setActive] = useState(false);
   const [uploadQueue, setUploadQueue] = useState([]);
   const [isPressed, setIsPressed] = useState(false);
@@ -45,26 +50,30 @@ export default function Upload() {
     setUploadQueue(newFiles);
   };
 
+  // 업로드 api 연결
   const handleUploadFiles = async () => {
-    // 업로드 api 연결
-    const folderId = 6; // 폴더 경로 추후 수정
     const formData = new FormData();
     uploadQueue.forEach(({ file }) => {
       formData.append('files', file);
     });
 
     try {
-      const response = await fetch(`http://144.24.83.40:8080/file/upload/${folderId}`, {
+      const response = await fetch(`http://3.38.95.127:8080/file/upload/${folderId}`, {
         method: 'POST',
         body: formData
       });
 
       if (response.status === 201) {
+        const result = await response.json();
         setIsSaved(true);
+        const uploadedImages = result.files.map(file => file.s3_key);
+        setUploadImages(uploadedImages);
+
         setUploadQueue([]);
         // 2초 후에 상태 바꾸기
         setTimeout(() => {
           setIsSaved(false);
+          console.log(uploadedImages);
         }, 2000);
       } else {
         alert('Failed to upload files');
@@ -73,7 +82,6 @@ export default function Upload() {
       console.error('Error uploading files:', error);
       alert('Failed to upload files');
     }
-    console.log("Uploading files:", uploadQueue);
   };
 
   const handleButtonPressing = () => {
