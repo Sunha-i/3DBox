@@ -49,8 +49,12 @@ function KakaoRedirectPage() {
           <img src="/assets/images/projectdesc.svg" alt="Project Description" />
       </object>
       <div className={styles.spinnerContainer}>
-        {isLoading &&<div className={styles.loadingSpinner}></div>}
-        <div className={styles.loadingText}>{isLoading ? "Loading" : "Login Successful"}</div>
+        {isLoading &&
+          <div class={styles.loadingSpinner}>
+            <div/><div/><div/><div/><div/><div/><div/><div/><div/><div/><div/><div/>
+          </div>
+        }
+        <div className={styles.loadingText}>{isLoading ? "Loading" : "Login Successful!"}</div>
       </div>
     </div>
   );
