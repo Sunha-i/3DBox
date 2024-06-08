@@ -27,8 +27,8 @@ export default function Login() {
       </object>
       <div style={{ height: "47px" }}></div>
       <button type="button" onMouseDown={handleButtonPressing} onMouseUp={handleButtonRelease} onClick={handleButtonClick}>
-        <img src={ isPressed ? "/assets/images/googlepressing.svg"
-                             : "/assets/images/googledefault.svg"} alt="Login with Google" />
+        <img src={ isPressed ? "/assets/images/kakaopressing.svg"
+                             : "/assets/images/kakaodefault.svg"} alt="Login with Kakao" />
       </button>
     </div>
   );
