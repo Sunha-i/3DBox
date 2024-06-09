@@ -11,12 +11,14 @@ import FolderContents from "./testpages/FolderContents";
 import FolderTree from "./testpages/FolderTree";
 
 export default function App() {
+  const rootFolderId = localStorage.getItem("rootFolderId");
+
   return (
     <FolderProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<Navigate to={`/home/${rootFolderId}`} />} />
           <Route path="/home/:id" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route
