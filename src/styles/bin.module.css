@@ -28,3 +28,104 @@
               -1px -1px #808080;
   box-sizing: border-box;
 }
+
+button{
+	all: unset;
+}
+
+.binMenu {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+}
+
+.divisionLine {
+  display: flex;
+  flex-direction: column;
+  margin: 1px;
+}
+
+.line {
+  width: 100%;
+  height: 0.5px;
+}
+
+.smallBox {
+  width: 15px;
+  height: 15px;
+  background-color: #ddd;
+  border: 1px solid #262626;
+  box-sizing: border-box;
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  box-shadow: inset 0px -1px 0px #808080,
+              inset -1px 0px 0px #808080,
+              inset 0px 1px 0px #ffffff, 
+              inset 1px 0px 0px #ffffff,
+              0.5px 0.5px 0px rgba(38, 38, 38, 0.3);
+}
+.smallBox:active {
+  box-shadow: inset 0px -1px 0px #ffffff,
+              inset -1px 0px 0px #ffffff,
+              inset 0px 1px 0px #808080, 
+              inset 1px 0px 0px #808080,
+              0.5px 0.5px 0px rgba(38, 38, 38, 0.3);
+}
+
+.gridZone {
+  /* margin-top: 30px; */
+  background-color: #ddd;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  padding: 15px 10px 0px 10px;
+  /* background-color: #5A5A80; */
+  align-content: flex-start;
+}
+
+.box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+}
+
+.squareBox {
+  width: 80px;
+  height: 80px;
+  background-color: #ddd;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  box-shadow: inset 0px -3px 0px rgba(38, 38, 38, 0.4), 
+              inset -3px 0px 0px rgba(38, 38, 38, 0.4),
+              inset 0px 3px 0px #ffffff, 
+              inset 3px 0px 0px #ffffff;
+  padding: 3px;
+  position: relative;
+  margin: 0px 6px 6px 0px;
+  /* box-sizing: border-box; */
+}
+
+.squareImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  padding: 3px;
+}
+
+.check {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: -4px;
+  left: 1px;
+}
+
+.btn {
+  margin: 0px 2px;
+}
