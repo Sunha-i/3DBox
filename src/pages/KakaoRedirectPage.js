@@ -38,7 +38,7 @@ function KakaoRedirectPage() {
     if (!isLoading) {
       const timer = setTimeout(() => {
         navigate("/home");
-      }, 1200);
+      }, 1000);
       return () => clearTimeout(timer); 
     }
   }, [isLoading, navigate]);
@@ -51,7 +51,7 @@ function KakaoRedirectPage() {
       <object type="image/svg+xml" data="/assets/images/projectdesc.svg">
           <img src="/assets/images/projectdesc.svg" alt="Project Description" />
       </object>
-      <div className={styles.spinnerContainer}>
+      <div className={styles.statusContainer}>
         {isLoading ? (
           <>
             <div class={styles.loadingSpinner}>
@@ -60,7 +60,10 @@ function KakaoRedirectPage() {
             <div className={styles.loadingText}>Loading</div>
           </>
         ) : (
-          <div className={styles.loginSuccess}>Login Successful!</div>
+          <>
+            <div className={styles.checkIcon}></div>
+            <div className={styles.loginSuccess}>Login Successful!</div>
+          </>
         )}
       </div>
     </div>
