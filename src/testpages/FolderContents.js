@@ -4,14 +4,17 @@ import { handleDownload, handleMoveToTrash } from "../api/file";
 import { createFolder } from "../api/folder";
 import { useNavigate } from "react-router-dom";
 import { FolderContext } from "../context/FolderContext";
+import { useParams } from "react-router-dom";
 
 export default function FolderContents({folderId}) {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const { uploadImages } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
+  const [topFolderName, setTopFolderName] = useState("");
   //const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
@@ -180,8 +183,9 @@ export default function FolderContents({folderId}) {
     fetchFolderData(id);
   }, [folderId, rootFolderId, uploadImages]);
 
-  const handleFolderClick = (folderId) => {
+  const handleFolderClick = (folderId, name) => {
     navigate(`/home/${folderId}`);
+    setTopFolderName(name);
     fetchFileData(folderId);
     fetchFolderData(folderId);
   };
@@ -223,7 +227,7 @@ export default function FolderContents({folderId}) {
         <object type="image/svg+xml" data="/assets/images/leftbar.svg">
           <img src="/assets/images/leftbar.svg" alt="Left Bar" />
         </object>
-        <div>Folder name</div>
+        <div>{id !== rootFolderId ? topFolderName : "Sunha's folder list"}</div>
         <object type="image/svg+xml" data="/assets/images/rightbar.svg">
           <img src="/assets/images/rightbar.svg" alt="Right Bar" />
         </object>
@@ -235,7 +239,7 @@ export default function FolderContents({folderId}) {
               <div
                 key={folder.folder_id}
                 className={styles.folderList}
-                onClick={() => handleFolderClick(folder.folder_id)}
+                onClick={() => handleFolderClick(folder.folder_id, folder.folder_name)}
               >
                 <object type="image/svg+xml" data="/assets/images/folder.svg">
                   <img src="/assets/images/folder.svg" alt="Upload Zone" />
@@ -260,7 +264,7 @@ export default function FolderContents({folderId}) {
                   <div
                     key={index}
                     className={styles.name}
-                    onDoubleClick={() => handleDoubleClick(index)}
+                    // onDoubleClick={() => handleDoubleClick(index)}
                   >
                     {folder.folder_name}
                   </div>

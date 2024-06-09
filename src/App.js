@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { FolderProvider } from "./context/FolderContext";
+import { ContextMenuProvider } from "./context/ContextMenu";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Folder from "./testpages/Folder";
@@ -12,27 +13,31 @@ import FolderContents from "./testpages/FolderContents";
 import FolderTree from "./testpages/FolderTree";
 
 export default function App() {
+  const rootFolderId = localStorage.getItem("rootFolderId");
+
   return (
     <FolderProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/home/:id" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route
-            path="/oauth/redirected/KAKAO"
-            element={<KakaoRedirectPage />}
-          />
-          <Route path="/folder" element={<Folder />} />
-          <Route path="/bin" element={<Bin />} />
-          <Route path="/upload" element={<Upload />} />
-          <Route path="/nonogram" element={<Game />} />
-          <Route path="/foldercontents/" element={<FolderContents />} />
-          <Route path="/foldercontents/:id" element={<FolderContents />} />
-          <Route path="/foldertree" element={<FolderTree />} />
-        </Routes>
-      </BrowserRouter>
+      <ContextMenuProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="/home" element={<Navigate to={`/home/${rootFolderId}`} />} />
+            <Route path="/home/:id" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/oauth/redirected/KAKAO"
+              element={<KakaoRedirectPage />}
+            />
+            <Route path="/folder" element={<Folder />} />
+            <Route path="/bin" element={<Bin />} />
+            <Route path="/upload" element={<Upload />} />
+            <Route path="/nonogram" element={<Game />} />
+            <Route path="/foldercontents/" element={<FolderContents />} />
+            <Route path="/foldercontents/:id" element={<FolderContents />} />
+            <Route path="/foldertree" element={<FolderTree />} />
+          </Routes>
+        </BrowserRouter>
+      </ContextMenuProvider>
     </FolderProvider>
   );
 }
