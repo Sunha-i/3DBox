@@ -354,7 +354,7 @@ export default function FolderContents({folderId}) {
           </div>
         </div>
         <div className={styles.gridZone}>
-        {fileList && fileList.length > 0? (
+          {fileList && fileList.length > 0? (
             imagePaths.map((path, idx) => (
               <div
                 key={idx}
