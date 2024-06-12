@@ -220,13 +220,7 @@ export default function FolderContents({ folderId }) {
   return (
     <div className={styles.container}>
       <div className={styles.titleBar}>
-        <object type="image/svg+xml" data="/assets/images/leftbar.svg">
-          <img src="/assets/images/leftbar.svg" alt="Left Bar" />
-        </object>
-        <div>{topFolderName}</div>
-        <object type="image/svg+xml" data="/assets/images/rightbar.svg">
-          <img src="/assets/images/rightbar.svg" alt="Right Bar" />
-        </object>
+        <div>{id !== rootFolderId ? topFolderName : "Sunha's folder"}</div>
       </div>
       <div className={styles.contentsZone}>
         <div className={styles.actionZone}>
@@ -351,6 +345,7 @@ export default function FolderContents({ folderId }) {
                   type="image/svg+xml"
                   data="/assets/images/newfolder.svg"
                   style={{ pointerEvents: "none" }}
+                  className={styles.folderIcon}
                 >
                   <img
                     src="/assets/images/newfolder.svg"
@@ -358,7 +353,7 @@ export default function FolderContents({ folderId }) {
                   />
                 </object>
               </button>
-              <button className={styles.toolBtn} onClick={prevFolderClick}>
+              {/* <button className={styles.toolBtn} onClick={prevFolderClick}>
                 <object
                   type="image/svg+xml"
                   data="/assets/images/newfolder.svg"
@@ -369,22 +364,25 @@ export default function FolderContents({ folderId }) {
                     alt="Add new folder"
                   />
                 </object>
-              </button>
+              </button> */}
               <button className={styles.toolBtn}>
-                <object
-                  type="image/svg+xml"
-                  data="/assets/images/newfolder.svg"
-                  style={{ pointerEvents: "none" }}
-                >
-                  <img
-                    src="/assets/images/newfolder.svg"
-                    alt="Add new folder"
-                  />
-                </object>
+                <img
+                  src="/assets/images/heart.png"
+                  alt="Favorite Image"
+                  className={styles.myfavorite}
+                />
               </button>
             </div>
           </div>
         </div>
+        
+        <div className={styles.divider}>
+          <div style={{ backgroundColor: "#ddd" }} className={styles.line} />
+          <div style={{ backgroundColor: "#bbb" }} className={styles.line} />
+          <div style={{ backgroundColor: "#999" }} className={styles.line} />
+          <div style={{ backgroundColor: "#fff" }} className={styles.line} />
+        </div>
+        
         <div className={styles.gridZone}>
           {fileList && fileList.length > 0 ? (
             imagePaths.map((path, idx) => (
