@@ -10,11 +10,10 @@ export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
-  const [topFolderName, setTopFolderName] = useState("");
   //const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
@@ -224,7 +223,7 @@ export default function FolderContents({ folderId }) {
         <object type="image/svg+xml" data="/assets/images/leftbar.svg">
           <img src="/assets/images/leftbar.svg" alt="Left Bar" />
         </object>
-        <div>{id !== rootFolderId ? topFolderName : "Sunha's folder list"}</div>
+        <div>{topFolderName}</div>
         <object type="image/svg+xml" data="/assets/images/rightbar.svg">
           <img src="/assets/images/rightbar.svg" alt="Right Bar" />
         </object>
