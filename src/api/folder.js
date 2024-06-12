@@ -2,7 +2,7 @@
 export const createFolder = async (folderName, userId, parentId) => {
   try {
     const response = await fetch(
-      'http://144.24.83.40:8080/folder/create',
+      'http://3.38.95.127:8080/folder/create',
       {
         method: 'POST',
         headers: {

@@ -4,7 +4,7 @@ import axios from "axios";
 export const handleDownload = async (fileId) => {
   try {
     const response = await axios.get(
-      `http://144.24.83.40:8080/file/download/${fileId}`,
+      `http://3.38.95.127:8080/file/download/${fileId}`,
       {
         responseType: "blob", // 파일을 다운로드하기 위해 blob으로 응답받음
         headers: {
@@ -42,7 +42,7 @@ export const handleDownload = async (fileId) => {
 export const handleMoveToTrash = async (fileId) => {
   try {
     const response = await fetch(
-      `http://144.24.83.40:8080/file/trash/${fileId}`,
+      `http://3.38.95.127:8080/file/trash/${fileId}`,
       {
         method: "PATCH",
         headers: {},
