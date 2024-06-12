@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/contextmenu.module.css";
 import { handleDownload, handleMoveToTrash, copyFile } from "../api/file";
+import { handleFolderToTrash } from "../api/folder";
 import { FolderContext } from "../context/FolderContext";
 
 export default function ContextMenu({ contextId, contextType }) {
@@ -9,7 +10,8 @@ export default function ContextMenu({ contextId, contextType }) {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const menuRef = useRef(null);
   const { id } = useParams();
-  const { checkedFiles } = useContext(FolderContext);
+  const navigate = useNavigate();
+  const { checkedFiles, setEditIndex } = useContext(FolderContext);
 
   useEffect(() => {
     const handleContextMenu = (event) => {
@@ -45,6 +47,12 @@ export default function ContextMenu({ contextId, contextType }) {
         case "copy":
           await copyFile(targetId, id);
           break;
+        case "deletefolder":
+          await handleFolderToTrash(targetId);
+          break;
+        case "rename":
+          setEditIndex(targetId);
+          break;
         default:
           break;
       }
@@ -65,9 +73,9 @@ export default function ContextMenu({ contextId, contextType }) {
         </>
       ) : contextType === "folder" ? (
         <>
-          <div className={styles["menu-item"]}>Open</div>
-          <div className={styles["menu-item"]}>Rename</div>
-          <div className={styles["menu-item"]}>Delete</div>
+          <div className={styles["menu-item"]} onClick={() => navigate(`/home/${contextId}`)}>Open</div>
+          <div className={styles["menu-item"]} onClick={() => handleMenuClick("rename")}>Rename</div>
+          <div className={styles["menu-item"]} onClick={() => handleMenuClick("deletefolder")}>Delete</div>
         </>
       ) : null}
     </div>

@@ -11,15 +11,13 @@ export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
   //const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
-
-  const [editIndex, setEditIndex] = useState(null);
   const [newName, setNewName] = useState("");
   const [newFolderName, setNewFolderName] = useState("Untitled folder"); // 폴더 생성 시 사용할
   const [fileList, setFileList] = useState([]);
@@ -45,6 +43,18 @@ export default function FolderContents({ folderId }) {
       setInputWidth(spanRef.current.getBoundingClientRect().width + 10);
     }
   }, [newName, newFolderName, isWriting]);
+
+  useEffect(() => {
+    if (editIndex !== null) {
+      const folderToEdit = folderList.find(folder => folder.folder_id === editIndex);
+      if (folderToEdit) {
+        setNewName(folderToEdit.folder_name);
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    }
+  }, [editIndex, folderList]);
 
   useEffect(() => {
     // input 바깥 눌렀을 때
@@ -81,11 +91,6 @@ export default function FolderContents({ folderId }) {
     setIsZoomed((prev) => !prev);
   };
 
-  const handleDoubleClick = (index) => {
-    setEditIndex(index);
-    setNewName(folderList[index].folder_name);
-  };
-
   const handleInputChange = (e) => {
     setNewName(e.target.value);
   };
@@ -95,11 +100,10 @@ export default function FolderContents({ folderId }) {
   };
 
   // 폴더 이름 수정
-  const changeFolderName = async (index) => {
-    const selectedFolderId = folderList[index].folder_id;
+  const changeFolderName = async (folderId) => {
     try {
       const response = await fetch(
-        `http://3.38.95.127:8080/folder/${selectedFolderId}/name/${newName}`,
+        `http://3.38.95.127:8080/folder/${folderId}/name/${newName}`,
         {
           method: "PATCH",
           headers: {
@@ -109,6 +113,7 @@ export default function FolderContents({ folderId }) {
       );
       if (response.ok) {
         const updatedNames = [...folderList];
+        const index = updatedNames.findIndex(folder => folder.folder_id === folderId);
         updatedNames[index].folder_name = newName;
         setFolderList(updatedNames);
         setEditIndex(null);
@@ -126,7 +131,7 @@ export default function FolderContents({ folderId }) {
         handleCreateFolder();
         setIsCreating(false);
       } else {
-        changeFolderName(index);
+        changeFolderName(folderList[index].folder_id);
       }
     }
   };
@@ -275,7 +280,7 @@ export default function FolderContents({ folderId }) {
                   <img src="/assets/images/folder.svg" alt="Upload Zone" />
                 </object>
                 <div className={styles.blankBox}></div>
-                {editIndex === index ? (
+                {editIndex === folder.folder_id ? (
                   <div>
                     <input
                       type="text"
@@ -294,7 +299,6 @@ export default function FolderContents({ folderId }) {
                   <div
                     key={folder.folder_id}
                     className={styles.name}
-                    onDoubleClick={() => handleDoubleClick(index)}
                   >
                     {folder.folder_name}
                   </div>
