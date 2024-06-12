@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/contextmenu.module.css";
+import Divider from "../components/Divider";
 
 export default function ContextMenu() {
   const [visible, setVisible] = useState(false);
@@ -33,8 +34,10 @@ export default function ContextMenu() {
       style={{ top: position.y, left: position.x }}
     >
       <div className={styles["menu-item"]}>Delete</div>
-      <div className={styles["menu-item"]}>Rename</div>
-      <div className={styles["menu-item"]}>Option 3</div>
+      <Divider />
+      <div className={styles["menu-item"]}>Download</div>
+      <Divider />
+      <div className={styles["menu-item"]}>Duplicate</div>
     </div>
   );
 }

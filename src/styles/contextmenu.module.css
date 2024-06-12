@@ -1,23 +1,26 @@
-/* contextmenu.module.css */
 .container {
-    position: fixed;
-    background-color: white;
-    border: 1px solid #ccc;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    display: none;
-  }
-  
-  .container.active {
-    display: block;
-  }
-  
-  .menu-item {
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-  
-  .menu-item:hover {
-    background-color: #f0f0f0;
-  }
-  
+  position: fixed;
+  border: 1px solid #262626;
+  background-color: #ddd;
+  box-shadow: inset -2px -2px 0px #808080,
+              inset 2px 2px 0px #ffffff,
+              1px 1px #262626;
+  z-index: 1000;
+  display: none;
+  padding: 2px 0px 2px;
+}
+
+.container.active {
+  display: block;
+}
+
+.menu-item {
+  padding: 4px 11px 4px 11px;
+  cursor: pointer;
+  margin-right: 2px;
+}
+
+.menu-item:hover {
+  background-color: #474764;
+  color: #fff;
+}

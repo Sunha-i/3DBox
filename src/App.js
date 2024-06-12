@@ -9,6 +9,7 @@ import Upload from "./testpages/Upload";
 import Game from "./testpages/Game";
 import FolderContents from "./testpages/FolderContents";
 import FolderTree from "./testpages/FolderTree";
+import ContextMenu from "./testpages/ContextMenu";
 
 export default function App() {
   const rootFolderId = localStorage.getItem("rootFolderId");
@@ -31,6 +32,7 @@ export default function App() {
           <Route path="/foldercontents/" element={<FolderContents />} />
           <Route path="/foldercontents/:id" element={<FolderContents />} />
           <Route path="/foldertree" element={<FolderTree />} />
+          <Route path="/contextmenu" element={<ContextMenu />} />
         </Routes>
       </BrowserRouter>
     </FolderProvider>
