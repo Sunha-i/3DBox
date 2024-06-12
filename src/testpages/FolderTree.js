@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FolderContext } from "../context/FolderContext";
 import styles from "../styles/foldertree.module.css";
+import { moveFile } from "../api/file";
 
 export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
@@ -58,6 +59,7 @@ export default function FolderTree() {
     const draggedFileId = e.dataTransfer.getData("text/plain");
 
     // 이미지 드롭 처리 로직 추가
+    moveFile(draggedFileId, id);
 
     console.log(`Dropped file id: ${draggedFileId} on folder id: ${id}`);
   };

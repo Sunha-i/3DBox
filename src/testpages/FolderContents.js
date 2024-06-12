@@ -5,20 +5,19 @@ import { createFolder } from "../api/folder";
 import { useNavigate } from "react-router-dom";
 import { FolderContext } from "../context/FolderContext";
 import { useParams } from "react-router-dom";
+import ContextMenu from "./ContextMenu";
 
 export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages, setTopFolderName, topFolderName, putBackList, setPutBackList } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
   //const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
-
-  const [editIndex, setEditIndex] = useState(null);
   const [newName, setNewName] = useState("");
   const [newFolderName, setNewFolderName] = useState("Untitled folder"); // 폴더 생성 시 사용할
   const [fileList, setFileList] = useState([]);
@@ -26,6 +25,14 @@ export default function FolderContents({ folderId }) {
   const [imagePaths, setImagePaths] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
+
+  const [contextMenu, setContextMenu] = useState({
+    visible: false,
+    x: 0,
+    y: 0,
+    id: null,
+    type: null,
+  });
 
   const spanRef = useRef(null);
   const inputRef = useRef(null);
@@ -36,6 +43,18 @@ export default function FolderContents({ folderId }) {
       setInputWidth(spanRef.current.getBoundingClientRect().width + 10);
     }
   }, [newName, newFolderName, isWriting]);
+
+  useEffect(() => {
+    if (editIndex !== null) {
+      const folderToEdit = folderList.find(folder => folder.folder_id === editIndex);
+      if (folderToEdit) {
+        setNewName(folderToEdit.folder_name);
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }
+    }
+  }, [editIndex, folderList]);
 
   useEffect(() => {
     // input 바깥 눌렀을 때
@@ -63,17 +82,13 @@ export default function FolderContents({ folderId }) {
         newChecked[index] = fileList[index].file_id;
       }
       console.log(newChecked);
+      setCheckedFiles(newChecked.filter(id => id !== false));
       return newChecked;
     });
   };
 
   const toggleZoom = () => {
     setIsZoomed((prev) => !prev);
-  };
-
-  const handleDoubleClick = (index) => {
-    setEditIndex(index);
-    setNewName(folderList[index].folder_name);
   };
 
   const handleInputChange = (e) => {
@@ -85,11 +100,10 @@ export default function FolderContents({ folderId }) {
   };
 
   // 폴더 이름 수정
-  const changeFolderName = async (index) => {
-    const selectedFolderId = folderList[index].folder_id;
+  const changeFolderName = async (folderId) => {
     try {
       const response = await fetch(
-        `http://3.38.95.127:8080/folder/${selectedFolderId}/name/${newName}`,
+        `http://3.38.95.127:8080/folder/${folderId}/name/${newName}`,
         {
           method: "PATCH",
           headers: {
@@ -99,6 +113,7 @@ export default function FolderContents({ folderId }) {
       );
       if (response.ok) {
         const updatedNames = [...folderList];
+        const index = updatedNames.findIndex(folder => folder.folder_id === folderId);
         updatedNames[index].folder_name = newName;
         setFolderList(updatedNames);
         setEditIndex(null);
@@ -116,7 +131,7 @@ export default function FolderContents({ folderId }) {
         handleCreateFolder();
         setIsCreating(false);
       } else {
-        changeFolderName(index);
+        changeFolderName(folderList[index].folder_id);
       }
     }
   };
@@ -226,8 +241,24 @@ export default function FolderContents({ folderId }) {
     e.dataTransfer.setData("text/plain", fileId);
   };
 
+  const handleContextMenu = (e, id, type) => {
+    e.preventDefault();
+    console.log(contextMenu.type);
+    console.log(contextMenu.id);
+    setContextMenu({
+      visible: true,
+      x: e.pageX,
+      y: e.pageY,
+      id: id,
+      type: type,
+    });
+  };
+
   return (
-    <div className={styles.container}>
+    <div 
+      className={styles.container}
+      onClick={() => setContextMenu({ ...contextMenu, visible: false })}
+    >
       <div className={styles.titleBar}>
         <div>{id !== rootFolderId ? topFolderName : "Sunha's folder"}</div>
       </div>
@@ -241,12 +272,15 @@ export default function FolderContents({ folderId }) {
                 onClick={() =>
                   handleFolderClick(folder.folder_id, folder.folder_name)
                 }
+                onContextMenu={(e) =>
+                  handleContextMenu(e, folder.folder_id, "folder")
+                }
               >
                 <object type="image/svg+xml" data="/assets/images/folder.svg">
                   <img src="/assets/images/folder.svg" alt="Upload Zone" />
                 </object>
                 <div className={styles.blankBox}></div>
-                {editIndex === index ? (
+                {editIndex === folder.folder_id ? (
                   <div>
                     <input
                       type="text"
@@ -265,7 +299,6 @@ export default function FolderContents({ folderId }) {
                   <div
                     key={folder.folder_id}
                     className={styles.name}
-                    onDoubleClick={() => handleDoubleClick(index)}
                   >
                     {folder.folder_name}
                   </div>
@@ -391,6 +424,9 @@ export default function FolderContents({ folderId }) {
                 draggable="true"
                 onDragStart={(e) => dragStartHandler(e, idx)}
                 onClick={() => toggleCheck(idx)}
+                onContextMenu={(e) =>
+                  handleContextMenu(e, fileList[idx].file_id, "file")
+                }
               >
                 <img
                   src={path}
@@ -420,6 +456,7 @@ export default function FolderContents({ folderId }) {
           )}
         </div>
       </div>
+      <ContextMenu contextId={contextMenu.id} contextType={contextMenu.type} />
     </div>
   );
 }

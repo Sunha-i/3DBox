@@ -8,6 +8,8 @@ export const FolderProvider = ({ children }) => {
   const [selectedId, setSelectedId] = useState(null);
   const [uploadImages, setUploadImages] = useState([]);
   const [putBackList, setPutBackList] = useState([]);
+  const [checkedFiles, setCheckedFiles] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
 
   const rootFolderId = localStorage.getItem("rootFolderId");
 
@@ -51,7 +53,23 @@ export const FolderProvider = ({ children }) => {
   }, [rootFolderId]);
 
   return (
-    <FolderContext.Provider value={{ folderTree, selectedId, setSelectedId, uploadImages, setUploadImages, topFolderName, setTopFolderName, putBackList, setPutBackList }}>
+    <FolderContext.Provider
+      value={{
+        folderTree,
+        selectedId,
+        setSelectedId,
+        uploadImages,
+        setUploadImages,
+        topFolderName,
+        setTopFolderName,
+        putBackList,
+        setPutBackList,
+        checkedFiles,
+        setCheckedFiles,
+        editIndex,
+        setEditIndex
+      }}
+    >
       {children}
     </FolderContext.Provider>
   );

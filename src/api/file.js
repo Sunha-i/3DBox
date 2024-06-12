@@ -51,7 +51,6 @@ export const handleMoveToTrash = async (fileId) => {
 
     if (response.ok) {
       console.log("File moved to trash successfully.");
-      // Optionally, add any state update or UI feedback here
     } else {
       console.error("Error moving file to trash:", response.statusText);
     }
@@ -59,3 +58,38 @@ export const handleMoveToTrash = async (fileId) => {
     console.error("Error moving file to trash:", error);
   }
 };
+
+// 파일 복사
+export async function copyFile(fileId, folderId) {
+  try {
+    const response = await fetch(`http://3.38.95.127:8080/file/copy/${fileId}/${folderId}`, {
+      method: 'POST',
+      headers: {
+        'Accept': '*/*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({})
+    });
+
+    if (response.ok) {
+      console.log('File copied successfully!');
+    } else {
+      console.error('Failed to copy file:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error copying file:', error);
+  }
+}
+
+export const moveFile = async(draggedFileId, droppedFolderId) => {
+  try {
+    const response = await axios.patch(`http://3.38.95.127:8080/file/move/${draggedFileId}/${droppedFolderId}`, {}, {
+      headers: {
+        'accept': '*/*'
+      }
+    });
+  } catch (error) {
+    console.error('API Error:', error);
+  }
+
+}

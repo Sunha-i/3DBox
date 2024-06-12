@@ -27,3 +27,24 @@ export const createFolder = async (folderName, userId, parentId) => {
     console.error("Error creating folder:", error);
   }
 };
+
+// 폴더 휴지통 이동
+export const handleFolderToTrash = async (folderId) => {
+  try {
+    const response = await fetch(
+      `http://3.38.95.127:8080/folder/trash/${folderId}`,
+      {
+        method: "PATCH",
+        headers: {},
+      }
+    );
+
+    if (response.ok) {
+      console.log("Folder moved to trash successfully.");
+    } else {
+      console.error("Error moving folder to trash:", response.statusText);
+    }
+  } catch (error) {
+    console.error("Error moving folder to trash:", error);
+  }
+};
