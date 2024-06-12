@@ -51,7 +51,6 @@ export const handleMoveToTrash = async (fileId) => {
 
     if (response.ok) {
       console.log("File moved to trash successfully.");
-      // Optionally, add any state update or UI feedback here
     } else {
       console.error("Error moving file to trash:", response.statusText);
     }
@@ -80,4 +79,17 @@ export async function copyFile(fileId, folderId) {
   } catch (error) {
     console.error('Error copying file:', error);
   }
+}
+
+export const moveFile = async(draggedFileId, droppedFolderId) => {
+  try {
+    const response = await axios.patch(`http://3.38.95.127:8080/file/move/${draggedFileId}/${droppedFolderId}`, {}, {
+      headers: {
+        'accept': '*/*'
+      }
+    });
+  } catch (error) {
+    console.error('API Error:', error);
+  }
+
 }
