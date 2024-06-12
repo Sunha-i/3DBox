@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/contextmenu.module.css";
+import Divider from "../components/Divider";
 import { handleDownload, handleMoveToTrash, copyFile } from "../api/file";
 import { handleFolderToTrash } from "../api/folder";
 import { FolderContext } from "../context/FolderContext";
@@ -68,13 +69,17 @@ export default function ContextMenu({ contextId, contextType }) {
       {contextType === "file" ? (
         <>
           <div className={styles["menu-item"]} onClick={() => handleMenuClick("download")}>Download</div>
+          <Divider />
           <div className={styles["menu-item"]} onClick={() => handleMenuClick("delete")}>Delete</div>
-          <div className={styles["menu-item"]} onClick={() => handleMenuClick("copy")}>Copy</div>
+          <Divider />
+          <div className={styles["menu-item"]} onClick={() => handleMenuClick("copy")}>Duplicate</div>
         </>
       ) : contextType === "folder" ? (
         <>
           <div className={styles["menu-item"]} onClick={() => navigate(`/home/${contextId}`)}>Open</div>
+          <Divider />
           <div className={styles["menu-item"]} onClick={() => handleMenuClick("rename")}>Rename</div>
+          <Divider />
           <div className={styles["menu-item"]} onClick={() => handleMenuClick("deletefolder")}>Delete</div>
         </>
       ) : null}
