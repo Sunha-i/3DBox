@@ -217,6 +217,15 @@ export default function FolderContents({ folderId }) {
     [newFolderName, userId, id]
   );
 
+  const getFileId = (index) => {
+    return fileList[index].file_id;
+  };
+
+  const dragStartHandler = (e, idx) => {
+    const fileId = getFileId(idx);
+    e.dataTransfer.setData("text/plain", fileId);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.titleBar}>
@@ -353,18 +362,6 @@ export default function FolderContents({ folderId }) {
                   />
                 </object>
               </button>
-              {/* <button className={styles.toolBtn} onClick={prevFolderClick}>
-                <object
-                  type="image/svg+xml"
-                  data="/assets/images/newfolder.svg"
-                  style={{ pointerEvents: "none" }}
-                >
-                  <img
-                    src="/assets/images/newfolder.svg"
-                    alt="Add new folder"
-                  />
-                </object>
-              </button> */}
               <button className={styles.toolBtn}>
                 <img
                   src="/assets/images/heart.png"
@@ -391,6 +388,8 @@ export default function FolderContents({ folderId }) {
                 className={`${styles.squareBox} ${
                   isZoomed ? styles.zoomedBox : ""
                 }`}
+                draggable="true"
+                onDragStart={(e) => dragStartHandler(e, idx)}
                 onClick={() => toggleCheck(idx)}
               >
                 <img
