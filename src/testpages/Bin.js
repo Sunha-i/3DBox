@@ -108,7 +108,7 @@ export default function Bin({ onClose }) {
       <div className={styles.binZone}>
         <div className={styles.binMenu}>
           <img src={ isPutBackPressed ? "/assets/images/putbackselected.svg"
-                                      : "/assets/images/putbacknormal.svg"} alt="Put Back" 
+                                      : isAnyChecked ? "/assets/images/putbacknormal.svg" : "/assets/images/putbackdisabled.svg"} alt="Put Back" 
                                       onMouseDown={() => { setIsPutBackPressed(true); if (isAnyChecked) handlePutBack(); }}
                                       onMouseUp={() => {setIsPutBackPressed(false)}} className={styles.btn}/>
           <img src={ isDeletePressed ? "/assets/images/deletebtnselected.svg"

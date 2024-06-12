@@ -15,9 +15,10 @@
 }
 
 .menu-item {
-  padding: 4px 11px 4px 11px;
+  font-size: 15px;
+  padding: 3.5px 9px;
   cursor: pointer;
-  margin-right: 2px;
+  margin: 0px 2px;
 }
 
 .menu-item:hover {
