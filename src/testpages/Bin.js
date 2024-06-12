@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styles from "../styles/bin.module.css";
 import axios from "axios";
+import { restoreFile, deleteFile, deleteAllFiles } from "../api/bin";
+import { FolderContext } from "../context/FolderContext";
 
 export default function Bin({ onClose }) {
   const userId = localStorage.getItem("userId");
@@ -13,6 +15,8 @@ export default function Bin({ onClose }) {
   const [folderList, setFolderList] = useState([]);
   const [imagePaths, setImagePaths] = useState([]);
   const [isChecked, setIsChecked] = useState([]);
+
+  const { setPutBackList } = useContext(FolderContext);
 
   useEffect(() => {
     // Fetch data from API on component mount
@@ -29,7 +33,7 @@ export default function Bin({ onClose }) {
     .catch(error => {
       console.error("There was an error fetching the data!", error);
     });
-  }, []);
+  }, [userId]);
 
 
   const handleButtonPressing = () => {
@@ -53,6 +57,46 @@ export default function Bin({ onClose }) {
     });
   };
 
+  const handlePutBack = async () => {
+    const filesToRestore = isChecked.filter(fileId => fileId !== false);
+    try {
+      await Promise.all(filesToRestore.map(fileId => restoreFile(fileId)));
+      // Update the file list by removing the restored files
+      const updatedFileList = fileList.filter(file => !filesToRestore.includes(file.file_id));
+      setFileList(updatedFileList);
+      setImagePaths(updatedFileList.map(file => file.s3_key));
+      setIsChecked(new Array(updatedFileList.length).fill(false));
+      setPutBackList(prev => [...prev, ...fileList.filter(file => filesToRestore.includes(file.file_id))]);
+    } catch (error) {
+      console.error('Error restoring files:', error);
+    }
+  };
+
+  const handleEmpty = async () => {
+    const allFileIds = fileList.map(file => file.file_id);
+    try {
+      await deleteAllFiles(allFileIds);
+      setFileList([]);
+      setImagePaths([]);
+      setIsChecked([]);
+    } catch (error) {
+      console.error('Error emptying the bin:', error);
+    }
+  };
+
+  const handleDelete = async () => {
+    const filesToDelete = isChecked.filter(fileId => fileId !== false);
+    try {
+      await Promise.all(filesToDelete.map(fileId => deleteFile(fileId)));
+      const updatedFileList = fileList.filter(file => !filesToDelete.includes(file.file_id));
+      setFileList(updatedFileList);
+      setImagePaths(updatedFileList.map(file => file.s3_key));
+      setIsChecked(new Array(updatedFileList.length).fill(false));
+    } catch (error) {
+      console.error('Error deleting files:', error);
+    }
+  };
+
   const isAnyChecked = isChecked.some((value) => value !== false);
 
   return (
@@ -65,15 +109,15 @@ export default function Bin({ onClose }) {
         <div className={styles.binMenu}>
           <img src={ isPutBackPressed ? "/assets/images/putbackselected.svg"
                                       : "/assets/images/putbacknormal.svg"} alt="Put Back" 
-                                      onMouseDown={() => {setIsPutBackPressed(true)}}
+                                      onMouseDown={() => { setIsPutBackPressed(true); if (isAnyChecked) handlePutBack(); }}
                                       onMouseUp={() => {setIsPutBackPressed(false)}} className={styles.btn}/>
           <img src={ isDeletePressed ? "/assets/images/deletebtnselected.svg"
                                      : isAnyChecked ? "/assets/images/deletebtnnormal.svg" : "/assets/images/deletebtndisabled.svg"} alt="Delete" 
-                                     onMouseDown={() => {setIsDeletePressed(true)}}
+                                     onMouseDown={() => { setIsDeletePressed(true); if (isAnyChecked) handleDelete(); }}
                                      onMouseUp={() => {setIsDeletePressed(false)}} className={styles.btn}/>
           <img src={ isEmptyBtnPressed ? "/assets/images/emptybtnselected.svg"
                                        :  "/assets/images/emptybtnnormal.svg"} alt="Empty Button" 
-                                       onMouseDown={() => {setIsEmptyBtnPressed(true)}}
+                                       onMouseDown={() => { setIsEmptyBtnPressed(true); handleEmpty(); }}
                                        onMouseUp={() => {setIsEmptyBtnPressed(false)}} className={styles.btn}/>
         </div>
         <div className={styles.divisionLine}>
@@ -110,7 +154,7 @@ export default function Bin({ onClose }) {
               </div>
             ))
           ):(
-            <div>No files in this folder</div>
+            <div>Nothing to delete</div>
           ) }
         </div>
       </div>
