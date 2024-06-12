@@ -277,7 +277,7 @@ export default function FolderContents({ folderId }) {
                 }
               >
                 <object type="image/svg+xml" data="/assets/images/folder.svg">
-                  <img src="/assets/images/folder.svg" alt="Upload Zone" />
+                  <img src="/assets/images/folder.svg" alt="Folder Icon" />
                 </object>
                 <div className={styles.blankBox}></div>
                 {editIndex === folder.folder_id ? (

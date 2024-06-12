@@ -45,12 +45,15 @@ export default function Home() {
       </div>
       <div 
         className={`${styles.trashIcon} ${isTrashOpen ? styles.open : ''}`} 
-        onDoubleClick={handleTrashDoubleClick}
-      >
-        <object type="image/svg+xml" data="/assets/images/trashempty.svg">
-          <img src="/assets/images/trashempty.svg" alt="Recycle Bin" />
+        onDoubleClick={handleTrashDoubleClick}>
+        <object 
+          type="image/svg+xml" 
+          data={isTrashOpen ? "/assets/images/trashfull.svg" : "/assets/images/trashempty.svg"}>
+          <img 
+            src={isTrashOpen ? "/assets/images/trashfull.svg" : "/assets/images/trashempty.svg"} 
+            alt="Recycle Bin" />
         </object>
-        <div>Trash</div>
+        <div className={styles.trashText}>Trash</div>
       </div>
       {isTrashOpen && (
         <Dragcont>
