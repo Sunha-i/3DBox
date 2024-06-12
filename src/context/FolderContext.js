@@ -3,10 +3,12 @@ import React, { createContext, useState, useEffect } from "react";
 export const FolderContext = createContext();
 
 export const FolderProvider = ({ children }) => {
+  const [topFolderName, setTopFolderName] = useState("Sunha's folder list");
   const [folderTree, setFolderTree] = useState(null);
   const [selectedId, setSelectedId] = useState(null);
   const [uploadImages, setUploadImages] = useState([]);
-  
+  const [putBackList, setPutBackList] = useState([]);
+
   const rootFolderId = localStorage.getItem("rootFolderId");
 
   const fetchFolderData = async (folderId) => {
@@ -49,7 +51,7 @@ export const FolderProvider = ({ children }) => {
   }, [rootFolderId]);
 
   return (
-    <FolderContext.Provider value={{ folderTree, selectedId, setSelectedId, uploadImages, setUploadImages }}>
+    <FolderContext.Provider value={{ folderTree, selectedId, setSelectedId, uploadImages, setUploadImages, topFolderName, setTopFolderName, putBackList, setPutBackList }}>
       {children}
     </FolderContext.Provider>
   );

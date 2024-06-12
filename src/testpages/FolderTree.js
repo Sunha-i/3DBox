@@ -6,7 +6,7 @@ import styles from "../styles/foldertree.module.css";
 export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
   const [selectedId, setSelectedId] = useState(null);
-  const { folderTree } = useContext(FolderContext);
+  const { folderTree, setTopFolderName, topFolderName } = useContext(FolderContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,9 +35,10 @@ export default function FolderTree() {
     }));
   };
 
-  const handleSelect = (id) => {
-    console.log("select", selectedId);
+  const handleSelect = (id, name) => {
     setSelectedId(id);
+    setTopFolderName(name);
+    console.log(topFolderName);
     navigate(`/home/${id}`);
   };
 
@@ -49,7 +50,7 @@ export default function FolderTree() {
         <div
           style={{ paddingLeft }}
           onClick={() => {
-            handleSelect(rowData.id);
+            handleSelect(rowData.id, rowData.name);
           }}
           className={`${styles.folderItem} ${
             selectedId === rowData.id ? styles.selected : ""
@@ -93,7 +94,7 @@ export default function FolderTree() {
         </div>
         <div
           onClick={() => {
-            handleSelect(null);
+            handleSelect(null, "Sunha's folder list");
           }}
           className={`${styles.userRoot} ${
             selectedId === null ? styles.userRootSelected : ""
