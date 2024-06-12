@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { FolderContext } from "../context/FolderContext";
 import { useParams } from "react-router-dom";
 
-export default function FolderContents({folderId}) {
+export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -21,11 +21,12 @@ export default function FolderContents({folderId}) {
 
   const [editIndex, setEditIndex] = useState(null);
   const [newName, setNewName] = useState("");
-  const [newFolderName, setNewFolderName] = useState("New folder");
+  const [newFolderName, setNewFolderName] = useState("Untitled folder"); // 폴더 생성 시 사용할
   const [fileList, setFileList] = useState([]);
   const [folderList, setFolderList] = useState([]);
   const [imagePaths, setImagePaths] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
+  const [isWriting, setIsWriting] = useState(false);
 
   const spanRef = useRef(null);
   const inputRef = useRef(null);
@@ -35,7 +36,7 @@ export default function FolderContents({folderId}) {
     if (spanRef.current) {
       setInputWidth(spanRef.current.getBoundingClientRect().width + 10);
     }
-  }, [newName, newFolderName]);
+  }, [newName, newFolderName, isWriting]);
 
   useEffect(() => {
     // input 바깥 눌렀을 때
@@ -46,19 +47,13 @@ export default function FolderContents({folderId}) {
         !inputRef.current.contains(event.target)
       ) {
         changeFolderName(editIndex);
-      } else if (
-        isCreating &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target)
-      ) {
-        handleCreateFolder();
       }
     };
     document.addEventListener("click", handleClick);
     return () => {
       document.removeEventListener("click", handleClick);
     };
-  }, [newName, newFolderName, editIndex, isCreating]);
+  }, [newName, newFolderName, editIndex]);
 
   const toggleCheck = (index) => {
     setIsChecked((prev) => {
@@ -84,6 +79,10 @@ export default function FolderContents({folderId}) {
 
   const handleInputChange = (e) => {
     setNewName(e.target.value);
+  };
+
+  const handleNewFolderInputChange = (e) => {
+    setNewFolderName(e.target.value);
   };
 
   // 폴더 이름 수정
@@ -114,10 +113,11 @@ export default function FolderContents({folderId}) {
 
   const handleKeyDown = (e, index) => {
     if (e.key === "Enter") {
-      if (index !== null) {
-        changeFolderName(index);
-      } else if (isCreating) {
+      if (index === null) {
         handleCreateFolder();
+        setIsCreating(false);
+      } else {
+        changeFolderName(index);
       }
     }
   };
@@ -176,7 +176,7 @@ export default function FolderContents({folderId}) {
     setImagePaths(updatedImagePaths);
     setIsChecked(new Array(updatedImagePaths.length).fill(false));
   };
-  
+
   useEffect(() => {
     const id = folderId || rootFolderId;
     fetchFileData(id);
@@ -196,29 +196,26 @@ export default function FolderContents({folderId}) {
 
   const handleCreateFolder = useMemo(
     () => async () => {
-      setIsCreating(true);
       try {
-        const newFolder = await createFolder(newFolderName, userId, folderId);
+        const newFolder = await createFolder(newFolderName, userId, id);
         if (newFolder) {
           // 폴더 생성 후 로딩 상태 해제
-          setIsCreating(false);
-
-          setFolderList([
-            ...folderList,
+          setFolderList((prevFolderList) => [
+            ...prevFolderList,
             {
-              folder_id: newFolder.FolderId,
-              folder_name: newFolder.FolderName,
+              folder_id: newFolder.folder_id,
+              folder_name: newFolder.folder_name,
             },
           ]);
-          setNewFolderName("Untitled Folder");
-          fetchFolderData(folderId); // 새로 생성한 폴더 포함하도록 폴더 목록 갱신
+          console.log("새폴더", newFolder);
+          fetchFolderData(id);
         }
       } catch (error) {
         console.error("Error creating new folder:", error);
         setIsCreating(false);
       }
     },
-    [createFolder, newFolderName, folderList, userId, rootFolderId]
+    [newFolderName, userId, id]
   );
 
   return (
@@ -239,7 +236,9 @@ export default function FolderContents({folderId}) {
               <div
                 key={folder.folder_id}
                 className={styles.folderList}
-                onClick={() => handleFolderClick(folder.folder_id, folder.folder_name)}
+                onClick={() =>
+                  handleFolderClick(folder.folder_id, folder.folder_name)
+                }
               >
                 <object type="image/svg+xml" data="/assets/images/folder.svg">
                   <img src="/assets/images/folder.svg" alt="Upload Zone" />
@@ -262,15 +261,38 @@ export default function FolderContents({folderId}) {
                   </div>
                 ) : (
                   <div
-                    key={index}
+                    key={folder.folder_id}
                     className={styles.name}
-                    // onDoubleClick={() => handleDoubleClick(index)}
+                    onDoubleClick={() => handleDoubleClick(index)}
                   >
                     {folder.folder_name}
                   </div>
                 )}
               </div>
             ))}
+            {isCreating && (
+              <div key="creating-folder" className={styles.folderList}>
+                <object type="image/svg+xml" data="/assets/images/folder.svg">
+                  <img src="/assets/images/folder.svg" alt="Upload Zone" />
+                </object>
+                <div className={styles.blankBox}></div>
+
+                <div key="new-folder">
+                  <input
+                    type="text"
+                    ref={inputRef}
+                    value={newFolderName}
+                    onChange={handleNewFolderInputChange}
+                    onKeyDown={(e) => handleKeyDown(e, null)}
+                    className={styles.input}
+                    style={{ width: `${inputWidth}px` }}
+                  />
+                  <span ref={spanRef} className={styles.hiddenSpan}>
+                    {newFolderName}
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
           <div className={styles.options}>
             <div className={styles.toolBar}>
@@ -318,7 +340,14 @@ export default function FolderContents({folderId}) {
                   <img src="/assets/images/delete.svg" alt="Delete" />
                 </object>
               </button>
-              <button className={styles.toolBtn} onClick={handleCreateFolder}>
+              <button
+                className={styles.toolBtn}
+                onClick={() => {
+                  setIsCreating(true);
+                  setIsWriting(true);
+                  setNewFolderName("Untitled Folder");
+                }}
+              >
                 <object
                   type="image/svg+xml"
                   data="/assets/images/newfolder.svg"
@@ -358,7 +387,7 @@ export default function FolderContents({folderId}) {
           </div>
         </div>
         <div className={styles.gridZone}>
-          {fileList && fileList.length > 0? (
+          {fileList && fileList.length > 0 ? (
             imagePaths.map((path, idx) => (
               <div
                 key={idx}
@@ -390,9 +419,9 @@ export default function FolderContents({folderId}) {
                 </div>
               </div>
             ))
-          ):(
+          ) : (
             <div>No files in this folder</div>
-          ) }
+          )}
         </div>
       </div>
     </div>
