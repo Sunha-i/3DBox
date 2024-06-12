@@ -40,11 +40,9 @@ export default function Home() {
           <FolderTree />
         </div>
       </Dragcont>
-      <Dragcont>
-        <div className={styles.folderContentsBox}>
-          <FolderContents folderId={folderId} />
-        </div>
-      </Dragcont>
+      <div className={styles.folderContentsBox}>
+        <FolderContents folderId={folderId} />
+      </div>
       <div 
         className={`${styles.trashIcon} ${isTrashOpen ? styles.open : ''}`} 
         onDoubleClick={handleTrashDoubleClick}

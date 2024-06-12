@@ -80,3 +80,7 @@
 .faceIcon {
   margin: 0px 5px;
 }
+
+.dragOver {
+  background-color: #b0b0b0;
+}

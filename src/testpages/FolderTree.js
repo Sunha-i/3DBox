@@ -6,6 +6,7 @@ import styles from "../styles/foldertree.module.css";
 export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
   const [selectedId, setSelectedId] = useState(null);
+  const [dragOverId, setDragOverId] = useState(null);
   const { folderTree, setTopFolderName, topFolderName } = useContext(FolderContext);
   const navigate = useNavigate();
 
@@ -42,19 +43,43 @@ export default function FolderTree() {
     navigate(`/home/${id}`);
   };
 
+  const handleDragOver = (e, id) => {
+    e.preventDefault();
+    setDragOverId(id);
+  };
+
+  const handleDragLeave = (id) => {
+    setDragOverId(null);
+  };
+
+  const handleDrop = (e, id) => {
+    e.preventDefault();
+    setDragOverId(null);
+    const draggedFileId = e.dataTransfer.getData("text/plain");
+
+    // 이미지 드롭 처리 로직 추가
+
+    console.log(`Dropped file id: ${draggedFileId} on folder id: ${id}`);
+  };
+
   const RecursiveComp = ({ rowData, depth }) => {
     const paddingLeft = 10 + depth * 17;
+    const isDraggedOver = dragOverId === rowData.id;
 
     return (
       <>
         <div
-          style={{ paddingLeft }}
+          style={{ paddingLeft, backgroundColor: isDraggedOver ? "#b0b0b0" : "transparent" }}
           onClick={() => {
             handleSelect(rowData.id, rowData.name);
           }}
+          onDragOver={(e) => handleDragOver(e, rowData.id)}
+          onDragLeave={() => handleDragLeave(rowData.id)}
+          onDrop={(e) => handleDrop(e, rowData.id)}
+
           className={`${styles.folderItem} ${
             selectedId === rowData.id ? styles.selected : ""
-          }`}
+          }`}   // ${dragOverId === rowData.id ? styles.dragOver : ""}
         >
           <div
             className={styles.toggleHash}
