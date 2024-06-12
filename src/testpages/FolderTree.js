@@ -69,7 +69,7 @@ export default function FolderTree() {
     return (
       <>
         <div
-          style={{ paddingLeft, backgroundColor: isDraggedOver ? "#b0b0b0" : "transparent" }}
+          style={{ paddingLeft }}
           onClick={() => {
             handleSelect(rowData.id, rowData.name);
           }}
@@ -79,7 +79,7 @@ export default function FolderTree() {
 
           className={`${styles.folderItem} ${
             selectedId === rowData.id ? styles.selected : ""
-          }`}   // ${dragOverId === rowData.id ? styles.dragOver : ""}
+          } ${isDraggedOver ? styles.dragOver : ""}`}
         >
           <div
             className={styles.toggleHash}
