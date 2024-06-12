@@ -59,6 +59,10 @@
   margin-right: 3px;
 }
 
+.dragOver {
+  background-color: #b0b0b0;
+}
+
 .selected {
   background-color: #474764;
   color: #fff;
@@ -79,8 +83,4 @@
 
 .faceIcon {
   margin: 0px 5px;
-}
-
-.dragOver {
-  background-color: #b0b0b0;
 }
