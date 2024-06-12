@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FolderContext } from "../context/FolderContext";
 import styles from "../styles/foldertree.module.css";
+import { moveFile } from "../api/file";
 
 export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
@@ -58,6 +59,7 @@ export default function FolderTree() {
     const draggedFileId = e.dataTransfer.getData("text/plain");
 
     // 이미지 드롭 처리 로직 추가
+    moveFile(draggedFileId, id);
 
     console.log(`Dropped file id: ${draggedFileId} on folder id: ${id}`);
   };
@@ -69,7 +71,7 @@ export default function FolderTree() {
     return (
       <>
         <div
-          style={{ paddingLeft, backgroundColor: isDraggedOver ? "#b0b0b0" : "transparent" }}
+          style={{ paddingLeft }}
           onClick={() => {
             handleSelect(rowData.id, rowData.name);
           }}
@@ -79,7 +81,7 @@ export default function FolderTree() {
 
           className={`${styles.folderItem} ${
             selectedId === rowData.id ? styles.selected : ""
-          }`}   // ${dragOverId === rowData.id ? styles.dragOver : ""}
+          } ${isDraggedOver ? styles.dragOver : ""}`}
         >
           <div
             className={styles.toggleHash}
