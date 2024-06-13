@@ -3,12 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FolderContext } from "../context/FolderContext";
 import styles from "../styles/foldertree.module.css";
 import { moveFile } from "../api/file";
+import { fetchFolderData, moveFolder } from "../api/folder";
 
 export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
   const [selectedId, setSelectedId] = useState(null);
   const [dragOverId, setDragOverId] = useState(null);
-  const { folderTree, setTopFolderName, topFolderName, renameFolderInfo, checkedFiles, setMovedFileList } = useContext(FolderContext);
+  const { folderTree, setFolderTree, setTopFolderName, topFolderName, renameFolderInfo, checkedFiles, setMovedFileList, setMovedFolderInfo, movedFolderInfo } = useContext(FolderContext);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -30,8 +31,9 @@ export default function FolderTree() {
 
       const initialToggleStatus = openAllFolders(folderTree);
       setToggleStatus(initialToggleStatus);
+      fetchFolderData(rootFolderId);
     }
-  }, [folderTree, renameFolderInfo]);
+  }, [folderTree, renameFolderInfo, movedFolderInfo, movedFolderInfo, rootFolderId]);
 
   const handleToggle = (id) => {
     setToggleStatus((prevState) => ({
@@ -59,17 +61,32 @@ export default function FolderTree() {
   const handleDrop = async (e, id) => {
     e.preventDefault();
     setDragOverId(null);
+
     const draggedFileId = e.dataTransfer.getData("text/plain");
+    const draggedFolderId = e.dataTransfer.getData("folder/plain");
 
     // 이미지 드롭 처리 로직 추가
-    const movedFiles = [];
-    for (const fileId of checkedFiles) {
-      await moveFile(fileId, id);
-      movedFiles.push(fileId);
-    }
-    setMovedFileList((prevList) => [...prevList, ...movedFiles]);
 
-    console.log(`Dropped file id: ${draggedFileId} on folder id: ${id}`);
+    if (draggedFileId) {
+      await moveFile(draggedFileId, id); // 체크 표시 안 한 파일 이동
+      setMovedFileList((prevList) => [...prevList, draggedFileId]);
+    }
+
+    const movedFiles = [];
+    if (checkedFiles) {
+      for (const fileId of checkedFiles) { // 여러 개의 파일 이동
+        await moveFile(fileId, id);
+        movedFiles.push(fileId);
+        console.log(`Dropped file id: ${draggedFileId} on folder id: ${id}`);
+      }
+      setMovedFileList((prevList) => [...prevList, ...movedFiles]);
+    }
+
+    if (draggedFolderId) {
+      await moveFolder(draggedFolderId, id);
+      console.log(`Dropped folder id: ${draggedFolderId} on folder id: ${id}`);
+      setMovedFolderInfo((prevList) => [...prevList, ...draggedFolderId]);
+    }
   };
 
   const RecursiveComp = ({ rowData, depth }) => {

@@ -1,3 +1,4 @@
+import axios from "axios";
 // 폴더 생성
 export const createFolder = async (folderName, userId, parentId) => {
   try {
@@ -62,3 +63,17 @@ export const fetchFolderData = async (id) => {
     console.error("Error fetching folder data:", error);
   }
 };
+
+// 폴더 이동
+export const moveFolder = async(draggedFolderId, droppedFolderId) => {
+  try {
+    const response = await axios.patch(`http://3.38.95.127:8080/folder/move/${draggedFolderId}/${droppedFolderId}`, {}, {
+      headers: {
+        'accept': '*/*'
+      }
+    });
+  } catch (error) {
+    console.error('API Error:', error);
+  }
+
+}

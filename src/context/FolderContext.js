@@ -14,6 +14,7 @@ export const FolderProvider = ({ children }) => {
   const [newFolderInfo, setNewFolderInfo] = useState(null);
   const [renameFolderInfo, setRenameFolderInfo] = useState(null);
   const [movedFileList, setMovedFileList] = useState([]);
+  const [movedFolderInfo, setMovedFolderInfo] = useState([]);  
 
   const rootFolderId = localStorage.getItem("rootFolderId");
 
@@ -54,7 +55,7 @@ export const FolderProvider = ({ children }) => {
 
   useEffect(() => {
     initializeFolderTree();
-  }, [rootFolderId, newFolderInfo, renameFolderInfo]);
+  }, [rootFolderId, newFolderInfo, renameFolderInfo, movedFileList, movedFolderInfo]);
 
   return (
     <FolderContext.Provider
@@ -79,7 +80,9 @@ export const FolderProvider = ({ children }) => {
         renameFolderInfo,
         setRenameFolderInfo,
         movedFileList,
-        setMovedFileList
+        setMovedFileList,
+        movedFolderInfo,
+        setMovedFolderInfo,
       }}
     >
       {children}
