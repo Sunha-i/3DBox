@@ -160,6 +160,10 @@
   padding-top: 10px;
 }
 
+.dragging {
+  opacity: 0.9;
+}
+
 .blankBox {
   width: 8px;
 }

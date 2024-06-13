@@ -11,7 +11,7 @@ export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList, movedFolderInfo } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
@@ -25,6 +25,7 @@ export default function FolderContents({ folderId }) {
   const [imagePaths, setImagePaths] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const [contextMenu, setContextMenu] = useState({
     visible: false,
@@ -202,7 +203,7 @@ export default function FolderContents({ folderId }) {
     fetchFileData(id);
     fetchFolderData(id);
     console.log("Move", movedFileList);
-  }, [folderId, rootFolderId, uploadImages, putBackList, updatedFileList, renameFolderInfo, movedFileList]);
+  }, [folderId, rootFolderId, uploadImages, putBackList, updatedFileList, renameFolderInfo, movedFileList, movedFolderInfo]);
 
   const handleFolderClick = (folderId, name) => {
     navigate(`/home/${folderId}`);
@@ -242,13 +243,13 @@ export default function FolderContents({ folderId }) {
     [newFolderName, userId, id]
   );
 
-  const getFileId = (index) => {
-    return fileList[index].file_id;
-  };
+  // const getFileId = (index) => {
+  //   return fileList[index].file_id;
+  // };
 
-  const dragStartHandler = (e, idx) => {
-    const fileId = getFileId(idx);
-    e.dataTransfer.setData("text/plain", fileId);
+  const dragStartHandler = (e, id, type) => {
+    e.dataTransfer.setData(type === "file" ? "text/plain" : "folder/plain", id);
+    setIsDragging(true);
   };
 
   const handleContextMenu = (e, id, type) => {
@@ -278,7 +279,10 @@ export default function FolderContents({ folderId }) {
             {folderList.map((folder, index) => (
               <div
                 key={folder.folder_id}
-                className={styles.folderList}
+                className={`${styles.folderList} ${isDragging ? styles.dragging : ""  }`}
+                draggable={true}
+                onDragStart={(e) => dragStartHandler(e, folder.folder_id, "folder")}
+                onDragEnd={() => setIsDragging(false)}
                 onContextMenu={(e) =>
                   handleContextMenu(e, folder.folder_id, "folder")
                 }
@@ -432,7 +436,7 @@ export default function FolderContents({ folderId }) {
                   isZoomed ? styles.zoomedBox : ""
                 }`}
                 draggable="true"
-                onDragStart={(e) => dragStartHandler(e, idx)}
+                onDragStart={(e) => dragStartHandler(e, fileList[idx].file_id, "file")}
                 onClick={() => toggleCheck(idx)}
                 onContextMenu={(e) =>
                   handleContextMenu(e, fileList[idx].file_id, "file")
