@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "../styles/contextmenu.module.css";
 import Divider from "../components/Divider";
-import { handleDownload, handleMoveToTrash, copyFile } from "../api/file";
-import { handleFolderToTrash } from "../api/folder";
+import { handleDownload, handleMoveToTrash, copyFile, fetchFileData } from "../api/file";
+import { handleFolderToTrash, fetchFolderData } from "../api/folder";
 import { FolderContext } from "../context/FolderContext";
 
 export default function ContextMenu({ contextId, contextType }) {
@@ -12,7 +12,7 @@ export default function ContextMenu({ contextId, contextType }) {
   const menuRef = useRef(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { checkedFiles, setEditIndex } = useContext(FolderContext);
+  const { checkedFiles, setEditIndex, setUpdatedFileList, setRenameFolderInfo } = useContext(FolderContext);
 
   useEffect(() => {
     const handleContextMenu = (event) => {
@@ -38,26 +38,39 @@ export default function ContextMenu({ contextId, contextType }) {
     const targetIds = checkedFiles.length > 0 ? checkedFiles : [contextId];
 
     for (const targetId of targetIds) {
+      if (contextType === "file") {
+        switch (action) {
+          case "download":
+            await handleDownload(targetId);
+            break;
+          case "delete":
+            await handleMoveToTrash(targetId);
+            break;
+          case "copy":
+            await copyFile(targetId, id);
+            break;
+          default:
+            break;
+        }
+      } 
+    }
+
+    if (contextType === "folder") {
       switch (action) {
-        case "download":
-          await handleDownload(targetId);
-          break;
-        case "delete":
-          await handleMoveToTrash(targetId);
-          break;
-        case "copy":
-          await copyFile(targetId, id);
-          break;
         case "deletefolder":
-          await handleFolderToTrash(targetId);
+          await handleFolderToTrash(contextId);
           break;
         case "rename":
-          setEditIndex(targetId);
+          setEditIndex(contextId);
           break;
         default:
           break;
       }
     }
+    
+    const updatedFiles = await fetchFileData(id);
+    const updatedFolders = await fetchFolderData(id);
+    setUpdatedFileList({ files: updatedFiles, folders: updatedFolders });
   };
 
   return (
@@ -80,7 +93,7 @@ export default function ContextMenu({ contextId, contextType }) {
           <Divider />
           <div className={styles["menu-item"]} onClick={() => handleMenuClick("rename")}>Rename</div>
           <Divider />
-          <div className={styles["menu-item"]} onClick={() => handleMenuClick("deletefolder")}>Delete</div>
+          <div className={styles["menu-item"]} onClick={() => { handleMenuClick("deletefolder"); setRenameFolderInfo(contextId); }}>Delete</div>
         </>
       ) : null}
     </div>

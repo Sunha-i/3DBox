@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FolderContext } from "../context/FolderContext";
 import styles from "../styles/foldertree.module.css";
 import { moveFile } from "../api/file";
@@ -8,9 +8,12 @@ export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
   const [selectedId, setSelectedId] = useState(null);
   const [dragOverId, setDragOverId] = useState(null);
-  const { folderTree, setTopFolderName, topFolderName } = useContext(FolderContext);
+  const { folderTree, setTopFolderName, topFolderName, renameFolderInfo } = useContext(FolderContext);
   const navigate = useNavigate();
+  const { id } = useParams();
 
+  const rootFolderId = localStorage.getItem("rootFolderId");
+  
   useEffect(() => {
     if (folderTree) {
       const openAllFolders = (folders, status = {}) => {
@@ -28,7 +31,7 @@ export default function FolderTree() {
       const initialToggleStatus = openAllFolders(folderTree);
       setToggleStatus(initialToggleStatus);
     }
-  }, [folderTree]);
+  }, [folderTree, renameFolderInfo]);
 
   const handleToggle = (id) => {
     setToggleStatus((prevState) => ({
@@ -80,7 +83,7 @@ export default function FolderTree() {
           onDrop={(e) => handleDrop(e, rowData.id)}
 
           className={`${styles.folderItem} ${
-            selectedId === rowData.id ? styles.selected : ""
+            id === rowData.id ? styles.selected : ""
           } ${isDraggedOver ? styles.dragOver : ""}`}
         >
           <div
@@ -121,10 +124,10 @@ export default function FolderTree() {
         </div>
         <div
           onClick={() => {
-            handleSelect(null, "Sunha's folder list");
+            handleSelect(rootFolderId, "Sunha's folder list");
           }}
           className={`${styles.userRoot} ${
-            selectedId === null ? styles.userRootSelected : ""
+            id === rootFolderId ? styles.userRootSelected : ""
           }`}
         >
           <object

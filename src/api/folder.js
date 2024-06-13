@@ -48,3 +48,17 @@ export const handleFolderToTrash = async (folderId) => {
     console.error("Error moving folder to trash:", error);
   }
 };
+
+// 폴더 내 하위 폴더 조회
+export const fetchFolderData = async (id) => {
+  try {
+    const response = await fetch(
+      `http://3.38.95.127:8080/folder/child/folder/${id}`
+    );
+    const data = await response.json();
+    console.log("Folder", data.folders);
+    return data.folders;
+  } catch (error) {
+    console.error("Error fetching folder data:", error);
+  }
+};
