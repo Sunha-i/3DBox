@@ -93,3 +93,18 @@ export const moveFile = async(draggedFileId, droppedFolderId) => {
   }
 
 }
+
+  // 폴더 내 파일 정보 조회
+  export const fetchFileData = async (id) => {
+    try {
+      const response = await fetch(
+        `http://3.38.95.127:8080/folder/child/file/${id}`
+      );
+      const data = await response.json();
+      console.log("File", data.files);
+      return data.files;
+      
+    } catch (error) {
+      console.error("Error fetching folder data:", error);
+    }
+  };

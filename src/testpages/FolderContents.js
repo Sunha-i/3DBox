@@ -11,7 +11,7 @@ export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
@@ -59,19 +59,24 @@ export default function FolderContents({ folderId }) {
   useEffect(() => {
     // input 바깥 눌렀을 때
     const handleClick = (event) => {
-      if (
-        editIndex !== null &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target)
-      ) {
-        changeFolderName(editIndex);
-      }
+      // if (editIndex === null) {
+      //   handleCreateFolder();
+      // } else {
+      //   changeFolderName(editIndex);
+      // }
+      // setIsCreating(false);
     };
     document.addEventListener("click", handleClick);
     return () => {
       document.removeEventListener("click", handleClick);
     };
   }, [newName, newFolderName, editIndex]);
+
+  useEffect(() => {
+    if (!isCreating) {
+      setNewFolderName("Untitled folder");
+    }
+  }, [isCreating]);
 
   const toggleCheck = (index) => {
     setIsChecked((prev) => {
@@ -117,6 +122,7 @@ export default function FolderContents({ folderId }) {
         updatedNames[index].folder_name = newName;
         setFolderList(updatedNames);
         setEditIndex(null);
+        setRenameFolderInfo(newName);
       } else {
         console.error("Error updating folder name:", response.statusText);
       }
@@ -129,10 +135,10 @@ export default function FolderContents({ folderId }) {
     if (e.key === "Enter") {
       if (index === null) {
         handleCreateFolder();
-        setIsCreating(false);
       } else {
         changeFolderName(folderList[index].folder_id);
       }
+      setIsCreating(false);
     }
   };
 
@@ -195,7 +201,7 @@ export default function FolderContents({ folderId }) {
     const id = folderId || rootFolderId;
     fetchFileData(id);
     fetchFolderData(id);
-  }, [folderId, rootFolderId, uploadImages, putBackList]);
+  }, [folderId, rootFolderId, uploadImages, putBackList, updatedFileList, renameFolderInfo]);
 
   const handleFolderClick = (folderId, name) => {
     navigate(`/home/${folderId}`);
@@ -222,10 +228,13 @@ export default function FolderContents({ folderId }) {
             },
           ]);
           console.log("새폴더", newFolder);
+          setNewFolderInfo(newFolder);
           fetchFolderData(id);
         }
       } catch (error) {
         console.error("Error creating new folder:", error);
+        setIsCreating(false);
+      } finally {
         setIsCreating(false);
       }
     },
@@ -269,14 +278,11 @@ export default function FolderContents({ folderId }) {
               <div
                 key={folder.folder_id}
                 className={styles.folderList}
-                onClick={() =>
-                  handleFolderClick(folder.folder_id, folder.folder_name)
-                }
                 onContextMenu={(e) =>
                   handleContextMenu(e, folder.folder_id, "folder")
                 }
               >
-                <object type="image/svg+xml" data="/assets/images/folder.svg">
+                <object type="image/svg+xml" data="/assets/images/folder.svg" >
                   <img src="/assets/images/folder.svg" alt="Folder Icon" />
                 </object>
                 <div className={styles.blankBox}></div>
@@ -299,6 +305,9 @@ export default function FolderContents({ folderId }) {
                   <div
                     key={folder.folder_id}
                     className={styles.name}
+                    onClick={() =>
+                      handleFolderClick(folder.folder_id, folder.folder_name)
+                    }
                   >
                     {folder.folder_name}
                   </div>
