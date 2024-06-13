@@ -8,7 +8,7 @@ export default function FolderTree() {
   const [toggleStatus, setToggleStatus] = useState({});
   const [selectedId, setSelectedId] = useState(null);
   const [dragOverId, setDragOverId] = useState(null);
-  const { folderTree, setTopFolderName, topFolderName, renameFolderInfo } = useContext(FolderContext);
+  const { folderTree, setTopFolderName, topFolderName, renameFolderInfo, checkedFiles, setMovedFileList } = useContext(FolderContext);
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -56,13 +56,18 @@ export default function FolderTree() {
     setDragOverId(null);
   };
 
-  const handleDrop = (e, id) => {
+  const handleDrop = async (e, id) => {
     e.preventDefault();
     setDragOverId(null);
     const draggedFileId = e.dataTransfer.getData("text/plain");
 
     // 이미지 드롭 처리 로직 추가
-    moveFile(draggedFileId, id);
+    const movedFiles = [];
+    for (const fileId of checkedFiles) {
+      await moveFile(fileId, id);
+      movedFiles.push(fileId);
+    }
+    setMovedFileList((prevList) => [...prevList, ...movedFiles]);
 
     console.log(`Dropped file id: ${draggedFileId} on folder id: ${id}`);
   };

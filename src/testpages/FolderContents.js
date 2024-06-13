@@ -11,7 +11,7 @@ export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
@@ -201,7 +201,8 @@ export default function FolderContents({ folderId }) {
     const id = folderId || rootFolderId;
     fetchFileData(id);
     fetchFolderData(id);
-  }, [folderId, rootFolderId, uploadImages, putBackList, updatedFileList, renameFolderInfo]);
+    console.log("Move", movedFileList);
+  }, [folderId, rootFolderId, uploadImages, putBackList, updatedFileList, renameFolderInfo, movedFileList]);
 
   const handleFolderClick = (folderId, name) => {
     navigate(`/home/${folderId}`);
