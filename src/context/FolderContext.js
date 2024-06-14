@@ -15,6 +15,7 @@ export const FolderProvider = ({ children }) => {
   const [renameFolderInfo, setRenameFolderInfo] = useState(null);
   const [movedFileList, setMovedFileList] = useState([]);
   const [movedFolderInfo, setMovedFolderInfo] = useState([]);  
+  const [removedFileList, setRemovedFileList] = useState([]);
 
   const rootFolderId = localStorage.getItem("rootFolderId");
 
@@ -83,6 +84,8 @@ export const FolderProvider = ({ children }) => {
         setMovedFileList,
         movedFolderInfo,
         setMovedFolderInfo,
+        removedFileList,
+        setRemovedFileList
       }}
     >
       {children}
