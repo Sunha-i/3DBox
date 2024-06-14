@@ -40,6 +40,16 @@
   position: absolute;
   top: 90px;
   left: 500px;
+}
+
+.trashText {
+  background-color: #ccc;
+  padding-left: -10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.trashText:focus {
+  background-color: #262626;
   color: #e3e3e3;
 }
 
@@ -49,7 +59,6 @@
   left: 700px;
   width: 100px;
   height: 100px;
-  background-color: red;
   display: none;
 }
 .binBox.open {

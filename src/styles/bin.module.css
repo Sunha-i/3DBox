@@ -34,6 +34,18 @@ button{
 }
 
 .binMenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 3px;
+}
+
+.selectedInfo {
+  padding-left: 10px;
+  font-size: 15px;
+}
+
+.menuBtn {
   height: 30px;
   display: flex;
   align-items: center;
@@ -81,9 +93,10 @@ button{
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
-  padding: 15px 10px 0px 10px;
+  padding: 10px 10px 0px;
   /* background-color: #5A5A80; */
   align-content: flex-start;
+  margin: 1px;
 }
 
 .box img {

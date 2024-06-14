@@ -108,18 +108,33 @@ export default function Bin({ onClose }) {
       </button>
       <div className={styles.binZone}>
         <div className={styles.binMenu}>
-          <img src={ isPutBackPressed ? "/assets/images/putbackselected.svg"
-                                      : isAnyChecked ? "/assets/images/putbacknormal.svg" : "/assets/images/putbackdisabled.svg"} alt="Put Back" 
-                                      onMouseDown={() => { setIsPutBackPressed(true); if (isAnyChecked) handlePutBack(); }}
-                                      onMouseUp={() => {setIsPutBackPressed(false)}} className={styles.btn}/>
-          <img src={ isDeletePressed ? "/assets/images/deletebtnselected.svg"
-                                     : isAnyChecked ? "/assets/images/deletebtnnormal.svg" : "/assets/images/deletebtndisabled.svg"} alt="Delete" 
-                                     onMouseDown={() => { setIsDeletePressed(true); if (isAnyChecked) handleDelete(); }}
-                                     onMouseUp={() => {setIsDeletePressed(false)}} className={styles.btn}/>
-          <img src={ isEmptyBtnPressed ? "/assets/images/emptybtnselected.svg"
-                                       :  "/assets/images/emptybtnnormal.svg"} alt="Empty Button" 
-                                       onMouseDown={() => { setIsEmptyBtnPressed(true); handleEmpty(); }}
-                                       onMouseUp={() => {setIsEmptyBtnPressed(false)}} className={styles.btn}/>
+          <div className={styles.selectedInfo}>
+            {fileList.length > 0 ? (
+              <>
+                All {fileList.length} items,{" "}
+                {isChecked.filter((value) => value !== false).length} items are
+                selected.
+              </>
+            ) : (
+              "All 0 items"
+            )}
+          </div>
+          <div className={styles.menuBtn}>
+            <img src={ isAnyChecked ? isPutBackPressed
+                                    ? "/assets/images/putbackselected.svg" : "/assets/images/putbacknormal.svg"
+                                    : "/assets/images/putbackdisabled.svg"} alt="Put Back"
+                                    onMouseDown={() => { setIsPutBackPressed(true); if (isAnyChecked) handlePutBack(); }}
+                                    onMouseUp={() => {setIsPutBackPressed(false)}} className={styles.btn}/>
+            <img src={ isAnyChecked ? isDeletePressed
+                                    ? "/assets/images/deletebtnselected.svg" : "/assets/images/deletebtnnormal.svg"
+                                    : "/assets/images/deletebtndisabled.svg"} alt="Delete"
+                                    onMouseDown={() => { setIsDeletePressed(true); if (isAnyChecked) handleDelete(); }}
+                                    onMouseUp={() => {setIsDeletePressed(false)}} className={styles.btn}/>
+            <img src={ isEmptyBtnPressed ? "/assets/images/emptybtnselected.svg"
+                                        :  "/assets/images/emptybtnnormal.svg"} alt="Empty Button" 
+                                        onMouseDown={() => { setIsEmptyBtnPressed(true); handleEmpty(); }}
+                                        onMouseUp={() => {setIsEmptyBtnPressed(false)}} className={styles.btn}/>
+          </div>
         </div>
         <div className={styles.divisionLine}>
           <div style={{ backgroundColor: "#ddd" }} className={styles.line} />
@@ -155,8 +170,8 @@ export default function Bin({ onClose }) {
               </div>
             ))
           ):(
-            <div>Nothing to delete</div>
-          ) }
+            <div>Nothing here.</div>
+          )}
         </div>
       </div>
     </div>
