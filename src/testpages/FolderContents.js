@@ -14,7 +14,7 @@ export default function FolderContents({ folderId }) {
   const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList, movedFolderInfo, setRemovedFileList } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
-
+  
   //const [folderId, setFolderId] = useState(paramFolderId || rootFolderId);
   const [isZoomed, setIsZoomed] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
@@ -26,8 +26,8 @@ export default function FolderContents({ folderId }) {
   const [isCreating, setIsCreating] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-
-// upload
+  
+  // upload
   const [isActive, setActive] = useState(false);
   const handleDragStart = () => setActive(true);
   const handleDragEnd = () => setActive(false);
@@ -341,34 +341,39 @@ export default function FolderContents({ folderId }) {
                   handleContextMenu(e, folder.folder_id, "folder")
                 }
               >
-                <object type="image/svg+xml" data="/assets/images/folder.svg" >
-                  <img src="/assets/images/folder.svg" alt="Folder Icon" />
-                </object>
-                <div className={styles.blankBox}></div>
                 {editIndex === folder.folder_id ? (
-                  <div>
-                    <input
-                      type="text"
-                      ref={inputRef}
-                      value={newName}
-                      onChange={handleInputChange}
-                      onKeyDown={(e) => handleKeyDown(e, index)}
-                      className={styles.input}
-                      style={{ width: `${inputWidth}px` }}
-                    />
-                    <span ref={spanRef} className={styles.hiddenSpan}>
-                      {newName}
-                    </span>
-                  </div>
+                  <>
+                    <div className={styles.folderIcon} />
+                    <div className={styles.blankBox} />
+                    <div>
+                      <input
+                        type="text"
+                        ref={inputRef}
+                        value={newName}
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        className={styles.input}
+                        style={{ width: `${inputWidth}px` }}
+                      />
+                      <span ref={spanRef} className={styles.hiddenSpan}>
+                        {newName}
+                      </span>
+                    </div>
+                  </>
                 ) : (
                   <div
                     key={folder.folder_id}
-                    className={styles.name}
-                    onClick={() =>
+                    className={styles.folderRow}
+                    tabIndex="0"
+                    onDoubleClick={() =>
                       handleFolderClick(folder.folder_id, folder.folder_name)
                     }
                   >
-                    {folder.folder_name}
+                    <div className={styles.folderIcon} />
+                    <div className={styles.blankBox} />
+                    <div className={styles.folderName}>
+                      {folder.folder_name}
+                    </div>
                   </div>
                 )}
               </div>
@@ -403,7 +408,7 @@ export default function FolderContents({ folderId }) {
                 <object
                   type="image/svg+xml"
                   data="/assets/images/GAN.svg"
-                  style={{ pointerEvents: "none" }}
+                  style={{ pointerEvents: "none", width: "28px" }}
                 >
                   <img src="/assets/images/GAN.svg" alt="GAN" />
                 </object>
@@ -417,7 +422,7 @@ export default function FolderContents({ folderId }) {
                 <object
                   type="image/svg+xml"
                   data="/assets/images/zoom.svg"
-                  style={{ pointerEvents: "none" }}
+                  style={{ pointerEvents: "none", width: "22px" }}
                 >
                   <img src="/assets/images/zoom.svg" alt="Zoom" />
                 </object>
@@ -455,7 +460,7 @@ export default function FolderContents({ folderId }) {
                   type="image/svg+xml"
                   data="/assets/images/newfolder.svg"
                   style={{ pointerEvents: "none" }}
-                  className={styles.folderIcon}
+                  className={styles.newfolderIcon}
                 >
                   <img
                     src="/assets/images/newfolder.svg"

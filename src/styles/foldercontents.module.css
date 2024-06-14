@@ -45,6 +45,7 @@
 
 .childFolders{
   flex-grow: 1;
+  overflow: auto;
 }
 
 .toolBar {
@@ -56,12 +57,14 @@
               inset -1.5px 0px 0px rgba(38, 38, 38, 0.4),
               inset 0px 1.5px 0px #ffffff, 
               inset 1.5px 0px 0px #ffffff;
-  margin: 20px 10px;
+  margin: 15px 10px;
 }
 
 .toolBtn {
-  width: 36px;
-  height: 36px;
+  width: 35px;
+  height: 35px;
+  /* width: 36px;
+  height: 36px; */
   border: 1px solid #262626;
   box-shadow: inset 0px -1.5px 0px rgba(38, 38, 38, 0.4), 
               inset -1.5px 0px 0px rgba(38, 38, 38, 0.4),
@@ -79,7 +82,7 @@
               inset 2px 0px 0px #888888;
 }
 
-.folderIcon {
+.newfolderIcon {
   width: 28px;
   height: 28px;
 }
@@ -104,7 +107,7 @@
   display: flex;
   flex-wrap: wrap;
   overflow: auto;
-  padding: 15px 10px 0px 10px;
+  padding: 15px 15px 0px;
   /* background-color: #a8a8bf; */
   align-content: flex-start;
 }
@@ -135,8 +138,8 @@
 }
 
 .zoomedBox {
-  width: 112px;
-  height: 112px;
+  width: 115px;
+  height: 115px;
   margin: 0px 8px 8px 0px;
   box-shadow: inset 0px -4px 0px rgba(38, 38, 38, 0.4), 
               inset -4px 0px 0px rgba(38, 38, 38, 0.4),
@@ -156,21 +159,42 @@
 .folderList {
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  padding-left: 15px;
   padding-top: 10px;
+  /* padding: 5px 0px 10px 5px; */
 }
 
 .dragging {
   opacity: 0.9;
 }
 
-.blankBox {
-  width: 8px;
+.folderRow {
+  display: flex;
+  align-items: center;
 }
 
-.clickText {
-  background-color: #000;
-  color: #ffffff;
+.folderIcon {
+  background-image: url('/public/assets/images/foldernormal.svg');
+  width: 22px;
+  height: 22px;
+  background-size: cover;
+}
+.folderRow:focus .folderIcon {
+  background-image: url('/public/assets/images/folderselected.svg');
+}
+
+.blankBox {
+  width: 5px;
+}
+
+.folderName {
+  font-size: 17px;
+  cursor: pointer;
+  padding: 0px 3px;
+}
+.folderRow:focus .folderName {
+  background-color: #262626;
+  color: #fff;
 }
 
 .editText {
@@ -233,11 +257,8 @@
   align-items: center;
 }
 
-.name {
-  font-size: 17px;
-}
-
 .input {
+  height: 20px;
   font-size: 17px;
   font-family: "ChiKareGo2";
   padding: 1.5px 0px 1.5px 2px;
