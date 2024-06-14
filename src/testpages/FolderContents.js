@@ -329,6 +329,15 @@ export default function FolderContents({ folderId }) {
       </div>
       <div className={styles.contentsZone}>
         <div className={styles.actionZone}>
+          <div className={styles.navigator}>
+            <div className={styles.navIcon}>↩</div>
+            <div 
+              onClick={prevFolderClick}
+              className={styles.navText}
+            >
+              Go Back
+            </div>
+          </div>
           <div className={styles.childFolders}>
             {folderList.map((folder, index) => (
               <div

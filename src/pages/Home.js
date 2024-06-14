@@ -53,7 +53,7 @@ export default function Home() {
             src={isTrashOpen ? "/assets/images/trashfull.svg" : "/assets/images/trashempty.svg"} 
             alt="Recycle Bin" />
         </object>
-        <div className={styles.trashText}>Trash</div>
+        <div className={styles.trashText} tabIndex="0">Trash</div>
       </div>
       {isTrashOpen && (
         <Dragcont>

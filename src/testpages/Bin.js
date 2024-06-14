@@ -109,8 +109,16 @@ export default function Bin({ onClose }) {
       <div className={styles.binZone}>
         <div className={styles.binMenu}>
           <div className={styles.selectedInfo}>
-            All 7 items, 2 items are selected.
-          </div> 
+            {fileList.length > 0 ? (
+              <>
+                All {fileList.length} items,{" "}
+                {isChecked.filter((value) => value !== false).length} items are
+                selected.
+              </>
+            ) : (
+              "All 0 items"
+            )}
+          </div>
           <div className={styles.menuBtn}>
             <img src={ isAnyChecked ? isPutBackPressed
                                     ? "/assets/images/putbackselected.svg" : "/assets/images/putbacknormal.svg"
@@ -162,8 +170,8 @@ export default function Bin({ onClose }) {
               </div>
             ))
           ):(
-            <div>Nothing to delete.</div>
-          ) }
+            <div>Nothing here.</div>
+          )}
         </div>
       </div>
     </div>
