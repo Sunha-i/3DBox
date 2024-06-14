@@ -16,8 +16,9 @@ export default function Bin({ onClose }) {
   const [imagePaths, setImagePaths] = useState([]);
   const [isChecked, setIsChecked] = useState([]);
 
-  const { setPutBackList } = useContext(FolderContext);
+  const { setPutBackList, removedFileList } = useContext(FolderContext);
 
+  console.log("Removed", removedFileList);
   useEffect(() => {
     // Fetch data from API on component mount
     axios.post('http://3.38.95.127:8080/folder/trash', {
@@ -33,7 +34,7 @@ export default function Bin({ onClose }) {
     .catch(error => {
       console.error("There was an error fetching the data!", error);
     });
-  }, [userId]);
+  }, [userId, removedFileList]);
 
 
   const handleButtonPressing = () => {

@@ -11,7 +11,7 @@ export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList, movedFolderInfo } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList, movedFolderInfo, setRemovedFileList } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
 
@@ -26,6 +26,56 @@ export default function FolderContents({ folderId }) {
   const [isCreating, setIsCreating] = useState(false);
   const [isWriting, setIsWriting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+// upload
+  const [isActive, setActive] = useState(false);
+  const handleDragStart = () => setActive(true);
+  const handleDragEnd = () => setActive(false);
+  const handleDragOver = (event) => { 
+    event.preventDefault();
+    setActive(true);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    setActive(false);
+
+    const files = event.dataTransfer.files;
+    handleFiles(files);
+  };
+
+  const handleFiles = (files) => {
+    const fileArray = Array.from(files);
+    const fileObjects = fileArray.map(file => ({ file }));
+    uploadFiles(fileObjects, id);
+  };
+
+  const uploadFiles = async (fileObjects ,id) => {
+    const formData = new FormData();
+    fileObjects.forEach(({ file }) => {
+        formData.append('files', file);
+    });
+
+    try {
+      const response = await fetch(`http://3.38.95.127:8080/file/upload/${id}`, {
+        method: 'POST',
+        headers: {
+          'accept': '*/*'
+      },
+        body: formData
+      });
+
+      if (response.status === 201) {
+        await fetchFileData(folderId);
+        await fetchFolderData(folderId);
+      } else {
+        console.log('Failed to upload files');
+      }
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      alert('Failed to upload files');
+    }
+  };
 
   const [contextMenu, setContextMenu] = useState({
     visible: false,
@@ -185,6 +235,10 @@ export default function FolderContents({ folderId }) {
     const selectedFileIds = isChecked.filter((id) => id !== false);
     for (const fileId of selectedFileIds) {
       await handleMoveToTrash(fileId);
+      setRemovedFileList((prevRemovedList) => [
+        ...prevRemovedList,
+          fileId,
+      ]);
     }
 
     // 파일 휴지통 이동 후 재정렬
@@ -427,7 +481,12 @@ export default function FolderContents({ folderId }) {
           <div style={{ backgroundColor: "#fff" }} className={styles.line} />
         </div>
         
-        <div className={styles.gridZone}>
+        <div className={styles.gridZone} 
+          onDragEnter={handleDragStart}
+          onDragLeave={handleDragEnd}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
           {fileList && fileList.length > 0 ? (
             imagePaths.map((path, idx) => (
               <div
