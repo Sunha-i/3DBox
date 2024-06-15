@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
+import React, { useState, useRef, useEffect, useMemo, useContext, useCallback } from "react";
 import styles from "../styles/foldercontents.module.css";
 import { handleDownload, handleMoveToTrash } from "../api/file";
 import { createFolder } from "../api/folder";
@@ -11,7 +11,7 @@ export default function FolderContents({ folderId }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList, movedFolderInfo, setRemovedFileList } = useContext(FolderContext);
+  const { uploadImages, setTopFolderName, topFolderName, putBackList, setCheckedFiles, setEditIndex, editIndex, updatedFileList, setNewFolderInfo, renameFolderInfo, setRenameFolderInfo, movedFileList, movedFolderInfo, setRemovedFileList, isEditing, setIsEditing } = useContext(FolderContext);
   const rootFolderId = localStorage.getItem("rootFolderId"); // 로컬 스토리지에서 root folder id 가져오기
   const userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
   
@@ -24,7 +24,6 @@ export default function FolderContents({ folderId }) {
   const [folderList, setFolderList] = useState([]);
   const [imagePaths, setImagePaths] = useState([]);
   const [isCreating, setIsCreating] = useState(false);
-  const [isWriting, setIsWriting] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   
   // upload
@@ -87,13 +86,14 @@ export default function FolderContents({ folderId }) {
 
   const spanRef = useRef(null);
   const inputRef = useRef(null);
+  const newFolderInputRef = useRef(null);
   const [inputWidth, setInputWidth] = useState(0);
 
   useEffect(() => {
     if (spanRef.current) {
       setInputWidth(spanRef.current.getBoundingClientRect().width + 10);
     }
-  }, [newName, newFolderName, isWriting]);
+  }, [newName, newFolderName]);
 
   useEffect(() => {
     if (editIndex !== null) {
@@ -108,20 +108,22 @@ export default function FolderContents({ folderId }) {
   }, [editIndex, folderList]);
 
   useEffect(() => {
-    // input 바깥 눌렀을 때
-    const handleClick = (event) => {
-      // if (editIndex === null) {
-      //   handleCreateFolder();
-      // } else {
-      //   changeFolderName(editIndex);
-      // }
-      // setIsCreating(false);
-    };
-    document.addEventListener("click", handleClick);
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  }, [newName, newFolderName, editIndex]);
+    if (isCreating && newFolderInputRef.current) {
+      newFolderInputRef.current.focus();
+    }
+  }, [isCreating]);
+
+  // input 바깥 눌렀을 때
+  const handleClick = (index) => {
+    // 폴더 생성
+    if (isCreating) {
+      handleCreateFolder();
+    } else if (index !== null) { // 이름 바꾸기
+      changeFolderName(index);
+    }
+    setIsCreating(false);
+    setIsEditing(false);
+  };
 
   useEffect(() => {
     if (!isCreating) {
@@ -157,9 +159,10 @@ export default function FolderContents({ folderId }) {
 
   // 폴더 이름 수정
   const changeFolderName = async (folderId) => {
+    let folderName = newName !== "" ? newName : contextMenu.name;
     try {
       const response = await fetch(
-        `http://3.38.95.127:8080/folder/${folderId}/name/${newName}`,
+        `http://3.38.95.127:8080/folder/${folderId}/name/${folderName}`,
         {
           method: "PATCH",
           headers: {
@@ -170,10 +173,10 @@ export default function FolderContents({ folderId }) {
       if (response.ok) {
         const updatedNames = [...folderList];
         const index = updatedNames.findIndex(folder => folder.folder_id === folderId);
-        updatedNames[index].folder_name = newName;
+        updatedNames[index].folder_name = folderName;
         setFolderList(updatedNames);
         setEditIndex(null);
-        setRenameFolderInfo(newName);
+        setRenameFolderInfo(folderName);
       } else {
         console.error("Error updating folder name:", response.statusText);
       }
@@ -269,32 +272,32 @@ export default function FolderContents({ folderId }) {
   const prevFolderClick = () => {
     navigate(-1);
   };
-
+  
+  console.log("new", newFolderName);
   const handleCreateFolder = useMemo(
     () => async () => {
+      let folderName = newFolderName !== "" ? newFolderName : "Untitled Folder"
       try {
-        const newFolder = await createFolder(newFolderName, userId, id);
+        const newFolder = await createFolder(folderName, userId, id);
         if (newFolder) {
           // 폴더 생성 후 로딩 상태 해제
           setFolderList((prevFolderList) => [
             ...prevFolderList,
             {
               folder_id: newFolder.folder_id,
-              folder_name: newFolder.folder_name,
+              folder_name: newFolder.folder_name, 
             },
           ]);
-          console.log("새폴더", newFolder);
           setNewFolderInfo(newFolder);
           fetchFolderData(id);
         }
       } catch (error) {
         console.error("Error creating new folder:", error);
-        setIsCreating(false);
       } finally {
         setIsCreating(false);
       }
     },
-    [newFolderName, userId, id]
+    [newFolderName, setNewFolderInfo, userId, id]
   );
 
   // const getFileId = (index) => {
@@ -306,7 +309,7 @@ export default function FolderContents({ folderId }) {
     setIsDragging(true);
   };
 
-  const handleContextMenu = (e, id, type) => {
+  const handleContextMenu = (e, id, type, name) => {
     e.preventDefault();
     console.log(contextMenu.type);
     console.log(contextMenu.id);
@@ -316,6 +319,7 @@ export default function FolderContents({ folderId }) {
       y: e.pageY,
       id: id,
       type: type,
+      name: name,
     });
   };
 
@@ -348,7 +352,7 @@ export default function FolderContents({ folderId }) {
               Go Back
             </div>
           </div>
-          <div className={styles.childFolders}>
+          <div className={styles.childFolders} onClick={(e) => {isEditing && handleClick(contextMenu.id); }}>
             {folderList.map((folder, index) => (
               <div
                 key={folder.folder_id}
@@ -357,7 +361,7 @@ export default function FolderContents({ folderId }) {
                 onDragStart={(e) => dragStartHandler(e, folder.folder_id, "folder")}
                 onDragEnd={() => setIsDragging(false)}
                 onContextMenu={(e) =>
-                  handleContextMenu(e, folder.folder_id, "folder")
+                  handleContextMenu(e, folder.folder_id, "folder", folder.folder_name)
                 }
               >
                 {editIndex === folder.folder_id ? (
@@ -404,7 +408,7 @@ export default function FolderContents({ folderId }) {
                 <div key="new-folder">
                   <input
                     type="text"
-                    ref={inputRef}
+                    ref={newFolderInputRef}
                     value={newFolderName}
                     onChange={handleNewFolderInputChange}
                     onKeyDown={(e) => handleKeyDown(e, null)}
@@ -458,8 +462,8 @@ export default function FolderContents({ folderId }) {
               </button>
               <button className={styles.toolBtn}
                       onClick={() => {
+                        setIsEditing(true);
                         setIsCreating(true);
-                        setIsWriting(true);
                         setNewFolderName("Untitled Folder");
                       }}
                       onMouseOver={() => handleMouseOver("New folder")}
@@ -519,7 +523,7 @@ export default function FolderContents({ folderId }) {
                 onDragStart={(e) => dragStartHandler(e, fileList[idx].file_id, "file")}
                 onClick={() => toggleCheck(idx)}
                 onContextMenu={(e) =>
-                  handleContextMenu(e, fileList[idx].file_id, "file")
+                  handleContextMenu(e, fileList[idx].file_id, "file", fileList[idx].file_name)
                 }
               >
                 <img
