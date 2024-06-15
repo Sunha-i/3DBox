@@ -14,6 +14,7 @@ export default function FolderTree() {
   const { id } = useParams();
 
   const rootFolderId = localStorage.getItem("rootFolderId");
+  const isRootDraggedOver = dragOverId === rootFolderId;
   
   useEffect(() => {
     if (folderTree) {
@@ -148,9 +149,12 @@ export default function FolderTree() {
           onClick={() => {
             handleSelect(rootFolderId, "Sunha's folder list");
           }}
+          onDragOver={(e) => handleDragOver(e, rootFolderId)}
+          onDragLeave={() => handleDragLeave(rootFolderId)}
+          onDrop={(e) => handleDrop(e, rootFolderId)}
           className={`${styles.userRoot} ${
             id === rootFolderId ? styles.userRootSelected : ""
-          }`}
+          } ${isRootDraggedOver ? styles.dragOver : ""}`}
         >
           <object
             type="image/svg+xml"
