@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo, useContext } from "react";
+import React, { useState, useRef, useEffect, useMemo, useContext, useCallback } from "react";
 import styles from "../styles/foldercontents.module.css";
 import { handleDownload, handleMoveToTrash } from "../api/file";
 import { createFolder } from "../api/folder";
@@ -159,9 +159,10 @@ export default function FolderContents({ folderId }) {
 
   // 폴더 이름 수정
   const changeFolderName = async (folderId) => {
+    let folderName = newName !== "" ? newName : contextMenu.name;
     try {
       const response = await fetch(
-        `http://3.38.95.127:8080/folder/${folderId}/name/${newName}`,
+        `http://3.38.95.127:8080/folder/${folderId}/name/${folderName}`,
         {
           method: "PATCH",
           headers: {
@@ -172,10 +173,10 @@ export default function FolderContents({ folderId }) {
       if (response.ok) {
         const updatedNames = [...folderList];
         const index = updatedNames.findIndex(folder => folder.folder_id === folderId);
-        updatedNames[index].folder_name = newName;
+        updatedNames[index].folder_name = folderName;
         setFolderList(updatedNames);
         setEditIndex(null);
-        setRenameFolderInfo(newName);
+        setRenameFolderInfo(folderName);
       } else {
         console.error("Error updating folder name:", response.statusText);
       }
@@ -271,32 +272,32 @@ export default function FolderContents({ folderId }) {
   const prevFolderClick = () => {
     navigate(-1);
   };
-
+  
+  console.log("new", newFolderName);
   const handleCreateFolder = useMemo(
     () => async () => {
+      let folderName = newFolderName !== "" ? newFolderName : "Untitled Folder"
       try {
-        const newFolder = await createFolder(newFolderName, userId, id);
+        const newFolder = await createFolder(folderName, userId, id);
         if (newFolder) {
           // 폴더 생성 후 로딩 상태 해제
           setFolderList((prevFolderList) => [
             ...prevFolderList,
             {
               folder_id: newFolder.folder_id,
-              folder_name: newFolder.folder_name,
+              folder_name: newFolder.folder_name, 
             },
           ]);
-          console.log("새폴더", newFolder);
           setNewFolderInfo(newFolder);
           fetchFolderData(id);
         }
       } catch (error) {
         console.error("Error creating new folder:", error);
-        setIsCreating(false);
       } finally {
         setIsCreating(false);
       }
     },
-    [newFolderName, userId, id]
+    [newFolderName, setNewFolderInfo, userId, id]
   );
 
   // const getFileId = (index) => {
@@ -308,7 +309,7 @@ export default function FolderContents({ folderId }) {
     setIsDragging(true);
   };
 
-  const handleContextMenu = (e, id, type) => {
+  const handleContextMenu = (e, id, type, name) => {
     e.preventDefault();
     console.log(contextMenu.type);
     console.log(contextMenu.id);
@@ -318,6 +319,7 @@ export default function FolderContents({ folderId }) {
       y: e.pageY,
       id: id,
       type: type,
+      name: name,
     });
   };
 
@@ -359,7 +361,7 @@ export default function FolderContents({ folderId }) {
                 onDragStart={(e) => dragStartHandler(e, folder.folder_id, "folder")}
                 onDragEnd={() => setIsDragging(false)}
                 onContextMenu={(e) =>
-                  handleContextMenu(e, folder.folder_id, "folder")
+                  handleContextMenu(e, folder.folder_id, "folder", folder.folder_name)
                 }
               >
                 {editIndex === folder.folder_id ? (
@@ -521,7 +523,7 @@ export default function FolderContents({ folderId }) {
                 onDragStart={(e) => dragStartHandler(e, fileList[idx].file_id, "file")}
                 onClick={() => toggleCheck(idx)}
                 onContextMenu={(e) =>
-                  handleContextMenu(e, fileList[idx].file_id, "file")
+                  handleContextMenu(e, fileList[idx].file_id, "file", fileList[idx].file_name)
                 }
               >
                 <img
