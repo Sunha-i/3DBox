@@ -12,7 +12,7 @@ export default function ContextMenu({ contextId, contextType }) {
   const menuRef = useRef(null);
   const { id } = useParams();
   const navigate = useNavigate();
-  const { checkedFiles, setEditIndex, setUpdatedFileList, setRenameFolderInfo } = useContext(FolderContext);
+  const { checkedFiles, setEditIndex, setUpdatedFileList, setRenameFolderInfo, isEditing, setIsEditing } = useContext(FolderContext);
 
   useEffect(() => {
     const handleContextMenu = (event) => {
@@ -61,6 +61,7 @@ export default function ContextMenu({ contextId, contextType }) {
           await handleFolderToTrash(contextId);
           break;
         case "rename":
+          setIsEditing(true);
           setEditIndex(contextId);
           break;
         default:
@@ -91,7 +92,7 @@ export default function ContextMenu({ contextId, contextType }) {
         <>
           <div className={styles["menu-item"]} onClick={() => navigate(`/home/${contextId}`)}>Open</div>
           <Divider />
-          <div className={styles["menu-item"]} onClick={() => handleMenuClick("rename")}>Rename</div>
+          <div className={styles["menu-item"]} onClick={() => handleMenuClick("rename") }>Rename</div>
           <Divider />
           <div className={styles["menu-item"]} onClick={() => { handleMenuClick("deletefolder"); setRenameFolderInfo(contextId); }}>Delete</div>
         </>
