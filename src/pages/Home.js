@@ -46,13 +46,9 @@ export default function Home() {
       <div 
         className={`${styles.trashIcon} ${isTrashOpen ? styles.open : ''}`} 
         onDoubleClick={handleTrashDoubleClick}>
-        <object 
-          type="image/svg+xml" 
-          data={isTrashOpen ? "/assets/images/trashfull.svg" : "/assets/images/trashempty.svg"}>
-          <img 
-            src={isTrashOpen ? "/assets/images/trashfull.svg" : "/assets/images/trashempty.svg"} 
-            alt="Recycle Bin" />
-        </object>
+        <img 
+            src={isTrashOpen ? "/assets/images/trashfull.png" : "/assets/images/trashempty.png"} 
+            alt="Recycle Bin" style={{ width: "50px" }}/>
         <div className={styles.trashText} tabIndex="0">Trash</div>
       </div>
       {isTrashOpen && (
@@ -62,6 +58,14 @@ export default function Home() {
           </div>
         </Dragcont>
       )}
+      <Dragcont>
+        <div className={styles.GAN}>
+          <object type="image/svg+xml" data="/assets/images/GAN.svg">
+            <img src="/assets/images/GAN.svg" alt="GAN ICON" />
+          </object>
+          <div>GAN</div>
+        </div>
+      </Dragcont>
     </div>
   );
 }
