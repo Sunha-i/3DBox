@@ -319,6 +319,16 @@ export default function FolderContents({ folderId }) {
     });
   };
 
+  const [hoveredButton, setHoveredButton] = useState(null);
+
+  const handleMouseOver = (buttonName) => {
+    setHoveredButton(buttonName);
+  };
+
+  const handleMouseOut = () => {
+    setHoveredButton(null);
+  };
+
   return (
     <div 
       className={styles.container}
@@ -389,11 +399,8 @@ export default function FolderContents({ folderId }) {
             ))}
             {isCreating && (
               <div key="creating-folder" className={styles.folderList}>
-                <object type="image/svg+xml" data="/assets/images/folder.svg">
-                  <img src="/assets/images/folder.svg" alt="Upload Zone" />
-                </object>
-                <div className={styles.blankBox}></div>
-
+                <div className={styles.folderIcon} />
+                <div className={styles.blankBox} />
                 <div key="new-folder">
                   <input
                     type="text"
@@ -412,8 +419,11 @@ export default function FolderContents({ folderId }) {
             )}
           </div>
           <div className={styles.options}>
+            <div className={styles.btnInfo}>{hoveredButton}</div>
             <div className={styles.toolBar}>
-              <button className={`${styles.toolBtn} ${styles["tool-GAN"]}`}>
+              <button className={`${styles.toolBtn} ${styles["tool-GAN"]}`}
+                      onMouseOver={() => handleMouseOver("GAN: Generate your own cartoon image")}
+                      onMouseOut={handleMouseOut}>
                 <object
                   type="image/svg+xml"
                   data="/assets/images/GAN.svg"
@@ -422,12 +432,10 @@ export default function FolderContents({ folderId }) {
                   <img src="/assets/images/GAN.svg" alt="GAN" />
                 </object>
               </button>
-              <button
-                className={`${styles.toolBtn} ${
-                  isZoomed ? styles.zoomedBtn : ""
-                }`}
-                onClick={toggleZoom}
-              >
+              <button className={`${styles.toolBtn} ${isZoomed ? styles.zoomedBtn : ""}`}
+                      onClick={toggleZoom}
+                      onMouseOver={() => handleMouseOver("Zoom")}
+                      onMouseOut={handleMouseOut}>
                 <object
                   type="image/svg+xml"
                   data="/assets/images/zoom.svg"
@@ -436,40 +444,30 @@ export default function FolderContents({ folderId }) {
                   <img src="/assets/images/zoom.svg" alt="Zoom" />
                 </object>
               </button>
-              <button
-                className={styles.toolBtn}
-                onClick={handleDownloadSelected}
-              >
+              <button className={styles.toolBtn}
+                      onClick={handleDownloadSelected}
+                      onMouseOver={() => handleMouseOver("Download")}
+                      onMouseOut={handleMouseOut}>
                 <object
                   type="image/svg+xml"
-                  data="/assets/images/download.svg"
-                  style={{ pointerEvents: "none" }}
+                  data="/assets/images/down.svg"
+                  style={{ pointerEvents: "none", width: "31px" }}
                 >
-                  <img src="/assets/images/download.svg" alt="Download" />
+                  <img src="/assets/images/down.svg" alt="Download" />
                 </object>
               </button>
-              <button className={styles.toolBtn} onClick={handleTrashSelected}>
-                <object
-                  type="image/svg+xml"
-                  data="/assets/images/delete.svg"
-                  style={{ pointerEvents: "none" }}
-                >
-                  <img src="/assets/images/delete.svg" alt="Delete" />
-                </object>
-              </button>
-              <button
-                className={styles.toolBtn}
-                onClick={() => {
-                  setIsCreating(true);
-                  setIsWriting(true);
-                  setNewFolderName("Untitled Folder");
-                }}
-              >
+              <button className={styles.toolBtn}
+                      onClick={() => {
+                        setIsCreating(true);
+                        setIsWriting(true);
+                        setNewFolderName("Untitled Folder");
+                      }}
+                      onMouseOver={() => handleMouseOver("New folder")}
+                      onMouseOut={handleMouseOut}>
                 <object
                   type="image/svg+xml"
                   data="/assets/images/newfolder.svg"
-                  style={{ pointerEvents: "none" }}
-                  className={styles.newfolderIcon}
+                  style={{ pointerEvents: "none", width: "25px", height: "25px" }}
                 >
                   <img
                     src="/assets/images/newfolder.svg"
@@ -477,11 +475,20 @@ export default function FolderContents({ folderId }) {
                   />
                 </object>
               </button>
-              <button className={styles.toolBtn}>
+              <button className={styles.toolBtn} onClick={handleTrashSelected}
+                      onMouseOver={() => handleMouseOver("Delete")}
+                      onMouseOut={handleMouseOut}>
+                <img src="/assets/images/trashempty.png" alt="Delete" 
+                     style={{ pointerEvents: "none", width: "27px", marginLeft: "2px" }}/>
+              </button>
+              <button className={styles.toolBtn}
+                      onMouseOver={() => handleMouseOver("Favorite")}
+                      onMouseOut={handleMouseOut}>
                 <img
-                  src="/assets/images/heart.png"
+                  src="/assets/images/heart.svg"
                   alt="Favorite Image"
                   className={styles.myfavorite}
+                  style={{ pointerEvents: "none", width: "25px" }}
                 />
               </button>
             </div>

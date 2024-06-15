@@ -45,7 +45,7 @@
 
 .navigator {
   display: flex;
-  padding: 8px 2px 0px;
+  padding: 10px 2px 0px;
 }
 
 .navIcon {
@@ -64,6 +64,10 @@
   overflow: auto;
 }
 
+.btnInfo {
+  margin-left: 15px;
+}
+
 .toolBar {
   background-color: #ddd;
   border: 1px solid #262626;
@@ -73,12 +77,12 @@
               inset -1.5px 0px 0px rgba(38, 38, 38, 0.4),
               inset 0px 1.5px 0px #ffffff, 
               inset 1.5px 0px 0px #ffffff;
-  margin: 15px 10px;
+  margin: 5px 10px 15px;
 }
 
 .toolBtn {
-  width: 35px;
-  height: 35px;
+  width: 34px;
+  height: 34px;
   /* width: 36px;
   height: 36px; */
   border: 1px solid #262626;
@@ -96,16 +100,6 @@
               inset -2px 0px 0px rgba(255, 255, 255, 0.6), 
               inset 0px 2px 0px #888888, 
               inset 2px 0px 0px #888888;
-}
-
-.newfolderIcon {
-  width: 28px;
-  height: 28px;
-}
-
-.myfavorite {
-  width: 32px;
-  height: 32px;
 }
 
 .divider {
