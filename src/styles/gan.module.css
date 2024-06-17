@@ -29,22 +29,70 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .selectZone {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px 0px 15px;
 }
 
-.ganResult {
+.selectYear {
+  display: flex;
+  height: 20px;
+  align-items: center;
+}
+
+.selectTheme {
+  display: flex;
+  margin: 0px 10px;
+  height: 20px;
+  align-items: center;
+}
+
+select {
+  background-color: transparent;
+  appearance: none;
+  border: none;
+  outline: none;
+  font-family: "ChiKareGo2";
+  font-size: 14px;
+  padding: 0px 10px;
+  margin: 0pc 3px;
+}
+
+.dropDownYear {
+  background-image: url('/public/assets/images/dropdownforyear.svg');
+  width: 88px;
+  height: 20px;
+}
+
+.dropDownTheme {
+  background-image: url('/public/assets/images/dropdownforcategory.svg');
+  width: 128px;
+  height: 20px;
+}
+
+.divisionLine {
+  display: flex;
+  flex-direction: column;
+  margin: 1px;
+}
+
+.line {
+  width: 100%;
+  height: 0.5px;
+}
+
+.resultZone {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.myresult {
+.ganResult {
   width: 100px;
   height: 100px;
   background-color: #ac7f7f;
