@@ -6,10 +6,12 @@ import FolderTree from "../testpages/FolderTree";
 import FolderContents from "../testpages/FolderContents";
 import { useParams } from "react-router-dom";
 import Bin from "../testpages/Bin";
+import Gan from "../testpages/Gan";
 
 export default function Home() {
   const { id: folderId } = useParams();
   const [isTrashOpen, setIsTrashOpen] = useState(false);
+  const [isGanOpen, setIsGanOpen] = useState(false);
 
   const handleTrashDoubleClick = () => {
     if (!isTrashOpen) {
@@ -19,6 +21,14 @@ export default function Home() {
 
   const handleCloseBin = () => {
     setIsTrashOpen(false);
+  };
+
+  const handleOpenGan = () => {
+    setIsGanOpen(true);
+  };
+
+  const handleCloseGan = () => {
+    setIsGanOpen(false);
   };
 
   return (
@@ -41,7 +51,7 @@ export default function Home() {
         </div>
       </Dragcont>
       <div className={styles.folderContentsBox}>
-        <FolderContents folderId={folderId} />
+        <FolderContents folderId={folderId} onGanClick={handleOpenGan} />
       </div>
       <div 
         className={`${styles.trashIcon} ${isTrashOpen ? styles.open : ''}`} 
@@ -58,14 +68,13 @@ export default function Home() {
           </div>
         </Dragcont>
       )}
-      <Dragcont>
-        <div className={styles.GAN}>
-          <object type="image/svg+xml" data="/assets/images/GAN.svg">
-            <img src="/assets/images/GAN.svg" alt="GAN ICON" />
-          </object>
-          <div>GAN</div>
-        </div>
-      </Dragcont>
+      {isGanOpen && (
+        <Dragcont>
+          <div className={`${styles.ganBox} ${isGanOpen ? styles.open : ''}`}>
+            <Gan onClose={handleCloseGan} />
+          </div>
+        </Dragcont>
+      )}
     </div>
   );
 }
