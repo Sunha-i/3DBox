@@ -1,0 +1,36 @@
+.container {
+  background-image: url('/public/assets/images/trashzone.svg');
+  width: 476px;
+  height: 337px;
+}
+
+.closeBox {
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  box-shadow: inset -1px -1px 0px #ffffff, 
+              inset 1px 1px 0px #808080;
+}
+
+.ganZone {
+  position: absolute;
+  top: 20px;
+  left: 5px;
+  width: 466px;
+  height: 312px;
+  background-color: #dddddd;
+  border: 1px solid #262626;
+  box-shadow: inset 1px 1px #fff,
+              inset -1px -1px #fff,
+              1px 1px #ffffff,
+              -1px -1px #808080;
+  box-sizing: border-box;
+}
+
+.ganResult {
+  width: 100px;
+  height: 100px;
+  background-color: #808080;
+}

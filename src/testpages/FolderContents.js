@@ -7,7 +7,7 @@ import { FolderContext } from "../context/FolderContext";
 import { useParams } from "react-router-dom";
 import ContextMenu from "./ContextMenu";
 
-export default function FolderContents({ folderId }) {
+export default function FolderContents({ folderId, onGanClick }) {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -426,8 +426,9 @@ export default function FolderContents({ folderId }) {
             <div className={styles.btnInfo}>{hoveredButton}</div>
             <div className={styles.toolBar}>
               <button className={`${styles.toolBtn} ${styles["tool-GAN"]}`}
-                      onMouseOver={() => handleMouseOver("GAN: Generate your own cartoon image")}
-                      onMouseOut={handleMouseOut}>
+                      onMouseOver={() => handleMouseOver("GAN: Generate your own image")}
+                      onMouseOut={handleMouseOut}
+                      onClick={onGanClick}>
                 <object
                   type="image/svg+xml"
                   data="/assets/images/GAN.svg"
