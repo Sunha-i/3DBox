@@ -1,7 +1,7 @@
 .container {
-  background-image: url('/public/assets/images/trashzone.svg');
-  width: 476px;
-  height: 337px;
+  background-image: url('/public/assets/images/ganwindow.svg');
+  width: 452px;
+  height: 302px;
 }
 
 .closeBox {
@@ -18,19 +18,82 @@
   position: absolute;
   top: 20px;
   left: 5px;
-  width: 466px;
-  height: 312px;
-  background-color: #dddddd;
+  width: 442px;
+  height: 277px;
+  background-color: #ddd;
   border: 1px solid #262626;
-  box-shadow: inset 1px 1px #fff,
-              inset -1px -1px #fff,
+  box-shadow: inset -1px -1px rgba(38, 38, 38, 0.2),
+              inset 1px 1px #fff,
               1px 1px #ffffff,
               -1px -1px #808080;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.selectZone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0px 15px;
+}
+
+.selectYear {
+  display: flex;
+  height: 20px;
+  align-items: center;
+}
+
+.selectTheme {
+  display: flex;
+  margin: 0px 10px;
+  height: 20px;
+  align-items: center;
+}
+
+select {
+  background-color: transparent;
+  appearance: none;
+  border: none;
+  outline: none;
+  font-family: "ChiKareGo2";
+  font-size: 14px;
+  padding: 0px 10px;
+  margin: 0pc 3px;
+}
+
+.dropDownYear {
+  background-image: url('/public/assets/images/dropdownforyear.svg');
+  width: 88px;
+  height: 20px;
+}
+
+.dropDownTheme {
+  background-image: url('/public/assets/images/dropdownforcategory.svg');
+  width: 128px;
+  height: 20px;
+}
+
+.divisionLine {
+  display: flex;
+  flex-direction: column;
+  margin: 1px;
+}
+
+.line {
+  width: 100%;
+  height: 0.5px;
+}
+
+.resultZone {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .ganResult {
   width: 100px;
   height: 100px;
-  background-color: #808080;
+  background-color: #ac7f7f;
 }
