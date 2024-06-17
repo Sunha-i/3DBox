@@ -4,6 +4,10 @@ import styles from "../styles/gan.module.css";
 export default function Gan({ onClose }) {
   const [isCloseBtnPressed, setIsCloseBtnPressed] = useState(false);
   const [isEmptyBtnPressed, setIsEmptyBtnPressed] = useState(false);
+  const [ganImage, setGanImage] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [type, setType] = useState(null);
+  const [year, setYear] = useState(null);
 
   const handleButtonPressing = () => {
     setIsCloseBtnPressed(true);
@@ -14,6 +18,24 @@ export default function Gan({ onClose }) {
   };
 
   const handleCreate = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(`http://3.38.95.127:8080/folder/child/file/${type}`, {
+        method: 'GET',
+        headers: {
+          'accept': '*/*'
+        }
+      });
+      const result = await response.json();
+      console.log(result);
+      if (result.files && result.files.length > 0) {
+        setGanImage(result.files[year].s3_key);
+      }
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -26,18 +48,48 @@ export default function Gan({ onClose }) {
         <div className={styles.selectZone}>
           <div className={styles.selectYear}>
             <div>Year:</div>
-            <select className={styles.dropDownYear}>
-              <option key="banana" value="banana">2013</option>
-              <option key="apple" value="apple">2015</option>
-              <option key="orange" value="orange">2017</option>
+            <select onChange={(e) => {
+              const selectedYear = e.target.value;
+              switch(selectedYear) {
+                case '2013':
+                  setYear(0);
+                  break;
+                case '2015':
+                  setYear(1);
+                  break;
+                case '2017':
+                  setYear(2);
+                  break;
+                default:
+                  setYear(0);
+              }
+            }} className={styles.dropDownYear}>
+              <option key="2013" value="2013">2013</option>
+              <option key="2015" value="2015">2015</option>
+              <option key="2017" value="2017">2017</option>
             </select>
           </div>
           <div className={styles.selectTheme}>
             <div>Theme:</div>
-            <select className={styles.dropDownTheme}>
-              <option key="banana" value="banana">Cartoon</option>
-              <option key="apple" value="apple">Illustration</option>
-              <option key="orange" value="orange">Fantasy</option>
+            <select onChange={(e) => {
+            const selectedType = e.target.value;
+              switch(selectedType) {
+                case 'cartoon':
+                  setType("9997");
+                  break;
+                case 'illustration':
+                  setType("9998");
+                  break;
+                case 'fantasy':
+                  setType("9999");
+                  break;
+                default:
+                  setType("9997");
+              }
+            }} className={styles.dropDownTheme}>
+              <option key="cartoon" value="cartoon">Cartoon</option>
+              <option key="illustration" value="illustration">Illustration</option>
+              <option key="fantasy" value="fantasy">Fantasy</option>
             </select>
           </div>
           <img src={ isEmptyBtnPressed ? "/assets/images/createbtnselected.svg"
@@ -53,7 +105,8 @@ export default function Gan({ onClose }) {
         </div>
         <div className={styles.resultZone}>
             <div className={styles.ganResult}>
-
+              {loading && <p>Loading...</p>}
+              {ganImage && <img src={ganImage} alt="gan" className="" />}
             </div>
         </div>
       </div>
