@@ -22,8 +22,8 @@
   height: 312px;
   background-color: #dddddd;
   border: 1px solid #262626;
-  box-shadow: inset 1px 1px #fff,
-              inset -1px -1px #fff,
+  box-shadow: inset -1px -1px rgba(38, 38, 38, 0.2),
+              inset 1px 1px #fff,
               1px 1px #ffffff,
               -1px -1px #808080;
   box-sizing: border-box;
