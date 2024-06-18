@@ -26,7 +26,6 @@ export const FolderProvider = ({ children }) => {
         `http://3.38.95.127:8080/folder/child/folder/${folderId}`
       );
       const data = await response.json();
-      console.log(data.folders);
       return data.folders;
     } catch (error) {
       console.error("Error fetching folder data:", error);
