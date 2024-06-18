@@ -31,11 +31,13 @@ export default function Gan({ onClose }) {
       if (result.files && result.files.length > 0) {
         setGanImage(result.files[year].s3_key);
       }
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 1500);
+      return () => clearTimeout(timer); 
     } catch (error) {
       console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (
@@ -105,8 +107,8 @@ export default function Gan({ onClose }) {
         </div>
         <div className={styles.resultZone}>
             <div className={styles.ganResult}>
-              {loading && <p>Loading...</p>}
-              {ganImage && <img src={ganImage} alt="gan" className="" />}
+              {loading && <p>Processing...</p>}
+              {(!loading && ganImage) && <img src={ganImage} alt="gan" className="" />}
             </div>
         </div>
       </div>

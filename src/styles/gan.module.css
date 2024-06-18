@@ -82,6 +82,12 @@ select {
   color: white;
 }
 
+.selectYear option,
+.selectTheme option {
+  background-color: #E2E2E1;
+  color: black;
+}
+
 .divisionLine {
   display: flex;
   flex-direction: column;

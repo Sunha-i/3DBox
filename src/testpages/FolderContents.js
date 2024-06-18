@@ -139,7 +139,6 @@ export default function FolderContents({ folderId, onGanClick }) {
       } else {
         newChecked[index] = fileList[index].file_id;
       }
-      console.log(newChecked);
       setCheckedFiles(newChecked.filter(id => id !== false));
       return newChecked;
     });
@@ -259,7 +258,6 @@ export default function FolderContents({ folderId, onGanClick }) {
     const id = folderId || rootFolderId;
     fetchFileData(id);
     fetchFolderData(id);
-    console.log("Move", movedFileList);
   }, [folderId, rootFolderId, uploadImages, putBackList, updatedFileList, renameFolderInfo, movedFileList, movedFolderInfo]);
 
   const handleFolderClick = (folderId, name) => {
@@ -273,7 +271,6 @@ export default function FolderContents({ folderId, onGanClick }) {
     navigate(-1);
   };
   
-  console.log("new", newFolderName);
   const handleCreateFolder = useMemo(
     () => async () => {
       let folderName = newFolderName !== "" ? newFolderName : "Untitled Folder"
@@ -311,7 +308,6 @@ export default function FolderContents({ folderId, onGanClick }) {
 
   const handleContextMenu = (e, id, type, name) => {
     e.preventDefault();
-    console.log(contextMenu.type);
     console.log(contextMenu.id);
     setContextMenu({
       visible: true,
