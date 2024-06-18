@@ -19,6 +19,10 @@ export default function Home() {
     }
   };
 
+  const handleGanDoubleClick = () => {
+    setIsGanOpen(true);
+  };
+
   const handleCloseBin = () => {
     setIsTrashOpen(false);
   };
@@ -40,16 +44,6 @@ export default function Home() {
         </object>
         <div className={`${styles.menuContents} ${styles.userName}`}>Sunha</div>
       </div>
-      <Dragcont>
-        <div className={styles.uploadBox}>
-          <Upload />
-        </div>
-      </Dragcont>
-      <Dragcont>
-        <div className={styles.folderTreeBox}>
-          <FolderTree />
-        </div>
-      </Dragcont>
       <div className={styles.folderContentsBox}>
         <FolderContents folderId={folderId} onGanClick={handleOpenGan} />
       </div>
@@ -61,6 +55,24 @@ export default function Home() {
             alt="Recycle Bin" style={{ width: "50px" }}/>
         <div className={styles.trashText} tabIndex="0">Trash</div>
       </div>
+      <div 
+        className={`${styles.ganIcon}`} 
+        onDoubleClick={handleGanDoubleClick}>
+        <img 
+            src={"/assets/images/ganicon.png"} 
+            alt="Gan" style={{ width: "45px" }}/>
+        <div className={styles.ganText} tabIndex="0">GAN</div>
+      </div>
+      <Dragcont>
+        <div className={styles.folderTreeBox}>
+          <FolderTree />
+        </div>
+      </Dragcont>
+      <Dragcont>
+        <div className={styles.uploadBox}>
+          <Upload />
+        </div>
+      </Dragcont>
       {isTrashOpen && (
         <Dragcont>
           <div className={`${styles.binBox} ${isTrashOpen ? styles.open : ''}`}>

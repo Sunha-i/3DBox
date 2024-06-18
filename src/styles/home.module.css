@@ -38,25 +38,39 @@
 
 .trashIcon {
   position: absolute;
-  top: 90px;
+  top: 100px;
   left: 500px;
+}
+
+.ganIcon {
+  position: absolute;
+  top: 105px;
+  left: 570px;
 }
 
 .trashText {
   background-color: #ccc;
-  padding-left: -10px;
-  margin-right: 10px;
+  margin-left: 5px;
+  text-align: center;
   cursor: pointer;
+  position: relative;
+  left: -5px;
 }
-.trashText:focus {
+.ganText {
+  background-color: #ccc;
+  text-align: center;
+  cursor: pointer;
+  margin: 0px 4px;
+}
+.trashText:focus, .ganText:focus {
   background-color: #262626;
   color: #e3e3e3;
 }
 
 .binBox {
   position: absolute;
-  top: 80px;
-  left: 1020px;
+  top: 500px;
+  left: 880px;
   width: 100px;
   height: 100px;
   display: none;
@@ -67,6 +81,6 @@
 
 .ganBox {
   position: absolute;
-  top: 500px;
-  left: 880px;
+  top: 80px;
+  left: 1020px;
 }

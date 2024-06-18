@@ -129,8 +129,8 @@
 }
 
 .squareBox {
-  width: 82px;
-  height: 82px;
+  width: 86px;
+  height: 86px;
   background-color: #ddd;
   border: 1px solid #000;
   display: flex;
@@ -148,8 +148,8 @@
 }
 
 .zoomedBox {
-  width: 115px;
-  height: 115px;
+  width: 117px;
+  height: 117px;
   margin: 0px 8px 8px 0px;
   box-shadow: inset 0px -4px 0px rgba(38, 38, 38, 0.4), 
               inset -4px 0px 0px rgba(38, 38, 38, 0.4),
