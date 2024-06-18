@@ -67,11 +67,19 @@ select {
   width: 88px;
   height: 20px;
 }
+.dropDownYear:focus {
+  background-image: url('/public/assets/images/dropdownselected.svg');
+  color: white;
+}
 
 .dropDownTheme {
   background-image: url('/public/assets/images/dropdownforcategory.svg');
   width: 128px;
   height: 20px;
+}
+.dropDownTheme:focus {
+  background-image: url('/public/assets/images/dropdownselectedlong.svg');
+  color: white;
 }
 
 .divisionLine {

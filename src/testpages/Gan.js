@@ -6,8 +6,8 @@ export default function Gan({ onClose }) {
   const [isEmptyBtnPressed, setIsEmptyBtnPressed] = useState(false);
   const [ganImage, setGanImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [type, setType] = useState(null);
-  const [year, setYear] = useState(null);
+  const [type, setType] = useState("9997");
+  const [year, setYear] = useState("0");
 
   const handleButtonPressing = () => {
     setIsCloseBtnPressed(true);
@@ -51,22 +51,22 @@ export default function Gan({ onClose }) {
             <select onChange={(e) => {
               const selectedYear = e.target.value;
               switch(selectedYear) {
-                case '2013':
+                case '2003':
                   setYear(0);
                   break;
-                case '2015':
+                case '2006':
                   setYear(1);
                   break;
-                case '2017':
+                case '2009':
                   setYear(2);
                   break;
                 default:
                   setYear(0);
               }
             }} className={styles.dropDownYear}>
-              <option key="2013" value="2013">2013</option>
-              <option key="2015" value="2015">2015</option>
-              <option key="2017" value="2017">2017</option>
+              <option key="2003" value="2003">2003</option>
+              <option key="2006" value="2006">2006</option>
+              <option key="2009" value="2009">2009</option>
             </select>
           </div>
           <div className={styles.selectTheme}>
