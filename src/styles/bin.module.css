@@ -27,6 +27,7 @@
               1px 1px #ffffff,
               -1px -1px #808080;
   box-sizing: border-box;
+  overflow: auto;
 }
 
 button{

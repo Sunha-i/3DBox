@@ -107,7 +107,7 @@ export default function Gan({ onClose }) {
         </div>
         <div className={styles.resultZone}>
             <div className={styles.ganResult}>
-              {loading && <p>Processing...</p>}
+              {loading && <p style={{ marginLeft: "5px" }}>Processing...</p>}
               {(!loading && ganImage) && <img src={ganImage} alt="gan" className="" />}
             </div>
         </div>
